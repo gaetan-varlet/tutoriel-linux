@@ -3,6 +3,7 @@
 ## Raccourcis utiles
 - `Tab` permet de faire de l'autocomplétion
 - `Ctrl + R` permet de faire une recherche parmi les commandes précédentes
+- `Ctrl + C` arrête la commande en cours
 - `Ctrl + D` fin de fichier
 - `Ctrl + L` efface le contenu de la console
 - `Shift + PgUp` et `Shift + PgDown` pour monter et descendre dans la console
