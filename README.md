@@ -1,4 +1,4 @@
-# Tutoriels Linux
+# Tutoriel Linux
 
 ## Raccourcis utiles
 - `Tab` permet de faire de l'autocomplétion
