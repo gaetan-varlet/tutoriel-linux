@@ -5,7 +5,7 @@
 - `Ctrl + R` permet de faire une recherche parmi les commandes précédentes
 - `Ctrl + C` arrête la commande en cours
 - `Ctrl + D` fin de fichier
-- `Ctrl + L` efface le contenu de la console
+- `Ctrl + L` ou `clear` efface le contenu de la console
 - `Shift + PgUp` et `Shift + PgDown` pour monter et descendre dans la console
 
 - `Ctrl + A` ramène le curseur au début de la commande, `Ctrl + E` ou `Fin` ramène le curseur à la de la commande
@@ -44,6 +44,7 @@
   - `-A` affiche tout comme `-a` sauf les dossiers *./* (dossier courant) et *../* (dossier parent)
   - `-F` indique le type d'élément (dossier, fichier, raccourci...)
   - `-l` liste détaillée (droits, nombre de liens physiques, nom du propriétaire, nom du groupe, taille du fichier en octets, date dernière modification, nom du fichier). Avec `lh`, le h pour *Human Readable* permet d'avoir la taille du fichier en Ko, Mo...
+  - `ls -l prefixe*` permet de lister seulement les fichiers commençant par *prefixe*
     - `-d` pour *Directory* qui affiche le répertoire au lieu d'afficher le contenu
   - `-t` trie par date de dernière modification. On voit en premier le dernier fichier modifié.
   - `-r` renverse l'ordre d'affichage des fichiers
@@ -63,6 +64,7 @@
   - `echo Bonjour >> test.txt` ajoute une ligne au fichier *test.txt*
 - `cat` affiche le contenu d'un fichier et peut en concaténer
   - `cat test.txt` affiche le contenu du fichier
+  - `cat -n test.txt` affiche le contenu du fichier avec les numéros de ligne
   - `cat test.txt test2.txt` affiche le contenu des deux fichiers
   - `cat fichier1 fichier2 fichier3 > grosfichier` enregistre le contenu des trois fichiers dans un seul
   - pour écrire dans un fichier sur plusieurs lignes, par exemple 2 lignes :
@@ -80,10 +82,16 @@
     - `B` pour reculer page par page
     - une fois arrivé au bout du fichier, on sort du mode de visualisation
   - `less` est un autre logiciel de visualisation
+    - `=` permet de savoir à quelle ligne on est et à quel pourcentage du fichier
     - mêmes commandes avec quelques avantages :
       - ne quitte pas le mode de visualisation à la fin du fichier
       - possibilité de naviguer avec les flèches du clavier
-      - fonction de recherche `/maChaine`. Toutes les occurrences sont affichés en surbrillance. Naivguer avec `N` et `Maj + N` pour passer d'occurrence en occurrence.
+      - fonction de recherche `/maChaine`. Toutes les occurrences sont affichés en surbrillance. Naivguer avec `n` et `N` pour passer d'occurrence en occurrence.
+
+- `head` et `tail` permettent d'afficher le début et la fin d'un fichier, par défaut 10 lignes. On peut spéficier le nombre de lignes que l'on veut afficher.
+  - `head -n 4 fichier` affiche les 4 premières lignes de *fichier*
+  - `tail fichier` affiche les 10 dernières lignes du fichier
+  - `tail -f fichier` pour *follow* permet d'afficher la fin du fichier au fur et à mesure de son évolution
 
 - `touch monFichier` crée un fichier vide *monFichier* s'il n'existe pas, sinon modifie l'horodatage du fichier si le fichier existe
 - `mkdir`, pour *Make Directory*, sert à créer un nouveau répertoire en spécifiant le nom de ce dernier ou en spécifiant le chemin complet
@@ -94,3 +102,39 @@
 - `tree` permet de voir l'arborescence dans le répertoire courant
   - `tree monDossier` permet de voir l'arborescence d'un sous-dossier du répertoire courant
   - `-d` n'affiche que les dossiers, `-a` affiche les dossiers et fichiers cachés
+
+- `cp` pour *copy* permet de copier des fichiers et des répertoires
+  - `cp fichier fichier2` copie le fichier dans le même répertoire
+  - `cp fichier.txt /cheminDestination` copie le fichier dans un autre répertoire
+  - `cp fichier.txt /dossier/fichier2.txt` copie le fichier dans un autre répertoire en le renommant
+  - `cp -R Fichiers/ /tmp/` ou `cp -r Fichiers/ /tmp/` permet de copier un répertoire entier avec tout son contenu (`-R` pour *recursive*) dans le répertoire spécifié
+  - `cp -R dossier/ copieDossier` permet de copier l'intégralité du répertoire dans un répertoire d'un autre nom
+  - `cp -R dossier/ ../copieDossier` permet de copier l'intégralité du répertoire dans un répertoire d'un autre nom dans un autre endroit du système
+- `mv` pour *move* permet de déplacer et renommer des fichiers et des répertoires
+  - `mv fichier dossier/` déplace *fichier* dans *dossier*
+  - `mv dossier1 dossier2/` déplace *dossier1* et son contenu dans *dossier2*
+  - `mv dossier/fichier ./` déplace *fichier* qui est dans *dossier* dans le répertoire courant
+  - `mv fichier fichierRenommé` renomme *fichier* en *fichierRenommé*, fonctionne aussi pour les dossiers
+  - `mv fichier dossier/fichierRenommé` déplace et renomme le fichier en une seule commande
+
+- `rm` et `rmdir` pour *remove* et *remove directory* permettent de supprimer des fichiers et des dossiers
+  - `rm fichier` supprime *fichier* sans demande de confirmation, le fichier est perdu à jamais
+  - `rm -i fichier` pour *interactive* demande une confirmation avant la suppression
+  - `rm -f fichier` pour *force* force la suppression si la demande de confirmation est systématique, par exemple avec l'ajout d'un alias sur la commande `rm`
+  - `rmdir dossier` supprime *dossier* seulement s'il est vide
+  - `rm -r dossier` pour *recursive*, supprime *dossier* et tout son contenu
+
+- `ln` permet de créer des liens (raccourcis) entre fichiers. Il existe 2 types de liens :
+    - **liens physiques** : `ln fichier1 fichier2` crée *fichier2* qui partage le même inode que *fichier1*
+      - `ls -i` permet d'afficher le numéro d'inode pour vérifier si les fichiers sont associés au même inode
+      - Une modification dans l'un entraîne une modification dans l'autre. Si on supprime l'un des 2 fichiers, l'autre reste en place et le contenu est touhours le même. Il faut supprimer les 2 pour supprimer le contenu.
+    - **liens symboliques** : `ln -s fichier1 fichier2` pour *symbolique*. Crée *fichier2* qui pointe sur **fichier1**.
+      - ressemble davantage au "raccourci" sous Windows, c'est-à-dire qu'on crée un lien vers un autre fichier
+      - on édite le même contenu dans *fichier1* et *fichier2*
+      - fonctionnent sur des répertoires contrairement aux liens physiques qui ne fonctionnent que sur les fichiers
+      - si on supprime *fichier2*, rien de mal. Si on supprime *fichier1*, *fichier2* pointe vers un fichier qui n'existe plus, on parle de *lien mort*.
+
+
+- `alias` concerne les alias de commande, qui sont des raccourcis
+  - `alias` permet de voir les alias existants
+  - `alias rm='rm -i'` permet de créer un alias. Cette création n'est pas persistante, elle disparaît en fermant la console
