@@ -37,9 +37,10 @@
 ## Les commandes de base
 
 - `date` donne la date et l'heure
-- `pwd` *Print Working Directory* c'est-à-dire afficher le dossier courant
-- `which` donne l'emplacement d'une commande, par exemple `which pwd`
-- `ls` *list* liste les fichiers et dossiers du répertoire courant. `ls /usr` liste les fichiers du répertoire *usr*.
+- `history` affiche la liste des commandes que l'on a saisi
+  - `!num` permet de répéter une commande déjà effectuée, par exemple `!245`
+- `pwd` pour *Print Working Directory* affiche le dossier courant
+- `ls` pour *list*, liste les fichiers et dossiers du répertoire courant. `ls /usr` liste les fichiers du répertoire *usr*.
   - `-a` ou `--all` affiche les fichiers et dossiers cachés
   - `-A` affiche tout comme `-a` sauf les dossiers *./* (dossier courant) et *../* (dossier parent)
   - `-F` indique le type d'élément (dossier, fichier, raccourci...)
@@ -62,7 +63,7 @@
   - `echo Bonjour` affiche *Bonjour* dans la console
   - `echo Bonjour > test.txt` enregistre *Bonjour* dans un fichier *test.txt*. Si le fichier existe déjà, il est écrasé.
   - `echo Bonjour >> test.txt` ajoute une ligne au fichier *test.txt*
-- `cat` affiche le contenu d'un fichier et peut en concaténer
+- `cat` affiche tout le contenu d'un fichier, et peut en concaténer
   - `cat test.txt` affiche le contenu du fichier
   - `cat -n test.txt` affiche le contenu du fichier avec les numéros de ligne
   - `cat test.txt test2.txt` affiche le contenu des deux fichiers
@@ -73,7 +74,7 @@
     ligne2
     FIN`
 
-- `more` et `less` pour afficher les gros fichiers. Ce sont des logiciels de pagination/visualisation de fichiers texte, on ne peut pas modifier les fichiers avec.
+- `more` et `less` pour afficher les gros fichiers, page par page. Ce sont des logiciels de pagination/visualisation de fichiers texte, on ne peut pas modifier les fichiers avec.
   - `more` est plus ancien, `less` plus récent et plus complet
   - `more fichier.txt` affiche le texte en remplissant un écran puis s'arrête. Pour continuer, il faut :
     - `Entrée` pour avancer ligne à ligne
@@ -134,7 +135,18 @@
       - fonctionnent sur des répertoires contrairement aux liens physiques qui ne fonctionnent que sur les fichiers
       - si on supprime *fichier2*, rien de mal. Si on supprime *fichier1*, *fichier2* pointe vers un fichier qui n'existe plus, on parle de *lien mort*.
 
-
 - `alias` concerne les alias de commande, qui sont des raccourcis
   - `alias` permet de voir les alias existants
   - `alias rm='rm -i'` permet de créer un alias. Cette création n'est pas persistante, elle disparaît en fermant la console
+
+- la documentation
+  - `man` pour *manual* affiche le manuel d'une commande comme avec la commande *less* : `man mkdir`. `/test` pour rechercher *test* dans la documentation. La documentation *man* est aussi disponible sur internet
+  - `apropos` permet de chercher les commandes en rapport à un terme, par exemple `apropos sound`
+  - `--help` donne une information proche de celle de *man*, par exemple `mkdir --help`
+  - `whatis` donne juste le nom de la commande pour comprendre ce qu'elle fait, par exemple `whatis mkdir`
+  - `info` affiche un manuel en ligne encore plus complet que *man*, par exemple `info mkdir`
+
+- les éditeurs de texte
+  - Nano
+  - Vim (vimtutor)
+  - Emacs
