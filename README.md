@@ -46,9 +46,10 @@
   - `-F` indique le type d'élément (dossier, fichier, raccourci...)
   - `-l` liste détaillée (droits, nombre de liens physiques, nom du propriétaire, nom du groupe, taille du fichier en octets, date dernière modification, nom du fichier). Avec `lh`, le h pour *Human Readable* permet d'avoir la taille du fichier en Ko, Mo...
   - `ls -l prefixe*` permet de lister seulement les fichiers commençant par *prefixe*
-    - `-d` pour *Directory* qui affiche le répertoire au lieu d'afficher le contenu
+  - `-d` pour *Directory* qui affiche le répertoire au lieu d'afficher le contenu. Pour afficher les informations détailles du répertoire sans son contenu : `ls -ld`
   - `-t` trie par date de dernière modification. On voit en premier le dernier fichier modifié.
   - `-r` renverse l'ordre d'affichage des fichiers
+  - `-R` pour *recursive*, affiche les sous-dossiers et leur contenu
   - exemple de combinaison des commandes : `ls -larth`
 - `cd` *Change Directory*, c'est-à-dire changer de dossier. Sans paramètre, ramène dans le home personnel
   - chemin absolu : on part de la racine : `cd /home/gaetan/documents`
@@ -146,7 +147,23 @@
   - `whatis` donne juste le nom de la commande pour comprendre ce qu'elle fait, par exemple `whatis mkdir`
   - `info` affiche un manuel en ligne encore plus complet que *man*, par exemple `info mkdir`
 
-- les éditeurs de texte
-  - Nano
-  - Vim (vimtutor)
-  - Emacs
+## Les éditeurs de texte
+Il en existe plusieurs. Les plus connus sont Nano, Vim (vimtutor pour apprendre à s'en servir) et Emacs.
+- Nano
+  - éditeur de texte simple comparé à Vim et Emacs
+  - `nano` pour lancer l'éditeur vide
+  - `nano fichier` lance l'éditeur en ouvrant le fichier
+  - `-m` pour autoriser l'utilisation de la souris
+  - `-i` pour l'indentation automatique, c'est-à-dire que la tabulation de la ligne précédente sera respecté lorsqu'on va à la ligne
+  - Nano se configure dans le fichier *.nanorc*, situé à la racine du home pour son propre fichier de configuration (*/home/user/.nanorc*), où dans le fichier *nanorc* situé dans le dossier etc (*/etc/nanorc*). Ce dernier nécessite d'être en root pour le modifier. Il contient déjà plusieurs options mises en commentaires pour l'exemple
+
+- Emacs
+
+- Vim
+
+## Configuration de la console
+
+Il faut modifier le fichier *.bashrc* personnel situé dans le répertoire personnel, ou le fichier *bashrc* global situé dans le répertoire */etc/bash.bashrc*.
+
+
+## Les utilisateurs et les droits
