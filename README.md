@@ -1,5 +1,6 @@
 # Tutoriel Linux
 
+
 ## Raccourcis utiles
 - `Tab` permet de faire de l’auto-complétion
 - `Ctrl + R` permet de faire une recherche parmi les commandes précédentes
@@ -12,6 +13,7 @@
 - `Ctrl + U` supprime ce qui se trouve à gauche du curseur, `Ctrl + K` ce qui se trouve à droite
 - `Ctrl + W` supprime le premier mot à gauche du curseur, utile pour supprimer ke paramètre à gauche du curseur
 - `Ctrl + Y` permet de *coller* le texte *coupé* avec `Ctrl + U`, `Ctrl + K` ou `Ctrl + W`
+
 
 ## Les répertoires
 - **/bin** pour *binaires* contient les commandes dont le système à besoin pour démarrer
@@ -147,8 +149,9 @@
   - `whatis` donne juste le nom de la commande pour comprendre ce qu'elle fait, par exemple `whatis mkdir`
   - `info` affiche un manuel en ligne encore plus complet que *man*, par exemple `info mkdir`
 
+
 ## Les éditeurs de texte
-Il en existe plusieurs. Les plus connus sont Nano, Vim (vimtutor pour apprendre à s'en servir) et Emacs.
+Il en existe plusieurs. Les plus connus sont Nano, Vim et Emacs.
 - Nano
   - éditeur de texte simple comparé à Vim et Emacs
   - `nano` pour lancer l'éditeur vide
@@ -157,13 +160,72 @@ Il en existe plusieurs. Les plus connus sont Nano, Vim (vimtutor pour apprendre 
   - `-i` pour l'indentation automatique, c'est-à-dire que la tabulation de la ligne précédente sera respecté lorsqu'on va à la ligne
   - Nano se configure dans le fichier *.nanorc*, situé à la racine du home pour son propre fichier de configuration (*/home/user/.nanorc*), où dans le fichier *nanorc* situé dans le dossier etc (*/etc/nanorc*). Ce dernier nécessite d'être en root pour le modifier. Il contient déjà plusieurs options mises en commentaires pour l'exemple
 
-- Emacs
+- Emacs : puissant éditeur de texte développé par Richard Stallman, le fondateur du projet GNU
 
-- Vim
+- Vim : autre puissant éditeur de texte généralement disponible par défaut sur Linux
+  - Vi existe en plusieurs versions : *vi* , le clone *elvis*, *vim* (VI iMproved, version améliorée de Vi),ou encore *gvim* dotée d'une interface graphique
+  - Vimtutor pour apprendre à s'en servir
+
 
 ## Configuration de la console
 
-Il faut modifier le fichier *.bashrc* personnel situé dans le répertoire personnel, ou le fichier *bashrc* global situé dans le répertoire */etc/bash.bashrc*.
+Il faut modifier le fichier *.bashrc* personnel situé dans le répertoire personnel, ou le fichier *bashrc* global situé dans le répertoire */etc/bash.bashrc*. On peut par exemple personnaliser l'invite de commande, ou aussi y créer des alias qui sont persistants.
+
+Il existe également un fichier *~/.profile* et un fichier */etc/profile* qui est lu dans les consoles où on se logue (les consoles Alt+Ctrl+F1 à F6), alors que le *.bashrc* est lu dans les consoles où on ne se logue pas, comme les consoles en mode graphique.
+Le *.profile* fait appel au *.bashrc* par défaut, donc faire des modifications dans le *.bashrc* modifiera les options pour les consoles avec et sans login.
 
 
 ## Les utilisateurs et les droits
+
+Chaque personne à son propre compte utilisateur avec des droits limités. Il existe un super-utilisateur appelé *root* qui a tous les droits, qui ne doit servir que rarement, lorsque c'est nécessaire.
+
+- `sudo` pour *Substitute User DO* ou encore faire en se substituant à l'utilisateur, permet de devenir *root temporairement* le temps d'exécuter une commande en faisant `sudo commande`
+- `sudo su` permet de devenir root et de le rester dans Ubuntu
+  - `su -` est suffisant dans les autres distributions, le tiret rend accessible certains programmes destinés seulement à root, et nous place  dans le dossier personnel de root (*/root*)
+  - le symbole `#` à la fin de l'invite de commandes indique que l'on est devenu super-utilisateur
+  - `exit` permet de quitter le *mode root*
+
+### Gestion des utilisateurs
+- commandes réservés à root
+- `adduser` permet d'ajouter un utilisateur, avec au minimum le nom d'utisateur à créer, par exemple `adduser louis`
+  - répertoire personnel est créé
+  - on doit choisir un mot de passe
+- `passwd` permet de changer le mot de passe du compte en paramètre, par exemple `passwd louis`
+  - sans paramètre, c'est le mdp de l'utilisateur connecté que l'on modifie
+- `deluser` permet de supprimer un compte, par exemple `deluser louis`
+  - ne supprime pas le répertoire personnel. Si on souhaite le faire, ajouter l'option `--remove-home`, par exemple `deluser --remove-home louis`
+- `adduser` et `deluser` n'existent que sous Debian et ses descendants dont Ubuntu. Ailleurs, il faut utiliser les commandes Unix traditionnelles `useradd` et `userdel` qui font la même chose de manière plus basique, par exemple il faut appeler `passwd` pour définir un mdp et activer le compte
+
+### Gestion des groupes
+- chaque utilisateur appartient à un groupe. Par défaut, un groupe du même nom que l'utilisateur est créé
+- `addgroup` permet de créer un groupe, par exemple `addgroup famille`
+- `usermod` permet de modifier un utilisateur
+   - `-l` renomme l'utilisateur sans renommer son répertoire personnel
+   - `-g` change de groupe, par exemple `usermod -g famille louis` pour mettre Louis dans le groupe famille et `usermod -g louis louis` pour le remettre dans le groupe louis
+   - `-G` permet à un utilisateur d'avoir plusieurs groupes, par exemple `usermod -G famille,amis louis`. L'utilisateur ne sera plus dans les groupes dans lesquels il était avant.
+   - `-a` permet d'ajouter des groupes à un utilisateur sans perdre les groupes auxquels il appartient, par exemple `usermod -aG famille louis`
+- `delgroup` permet de supprimer un groupe, par exemple `delgroup famille`
+- `addgroup` et `delgroup` n'existent que sous Debian et ses dérivés. Les commandes traditionnelles sont `groupadd` et `groupdel` qui offrent moins d'options
+
+### Gestion des propriétaires d'un fichier
+- seul l'utilisateur root peut changer le propriétaire d'un fichier
+- `chown` permet de changer le propriétaire d'un fichier, en renseignant le nom du nouveau propriétaire et le nom du fichier, par exemple `chown louis fichier`. Cela ne change pas le groupe du fichier
+  - `chown louis:famille fichier` permet de changer le propriétaire et le groupe en même temps
+  - `-R` pour *recursive* permet d'affecter tous les sous-dossiers et fichiers contenu dans le dossier, par exemple `chown -R louis:louis /home/gaetan/dossier/`
+- `chgrp` permet de changer le groupe propriétaire du fichier, par exemple `chgrp famille fichier`
+
+### Modifier les droits d'accès
+- chaque fichier et dossier possède des droits : voir, modifier et exécuter
+- la commande `ls -l` permet de voir les droits, il s'agit des 10 premiers caractères
+  - le 1er **d** pour *directory* si c'est un dossier, **l** pour *link* ou **-** si c'est un fichier
+  - 3 triplets qui correspondent aux droits de l'utilisateur, du groupe et des autres. Un triplet correspond à **rwx** pour *read*, *write* et *execute* Ce dernier n'est utile que pour les fichiers exécutables (programmes et scripts). Si c'est un dossier, indique qu'on peut le traverser, c-a-d voir les sous-dossiers qu'il contient si on a les droits en lecture dessus. Si la lettre apparaît, c'est que le droit existe. S'il y a un tiret à la place, c'est qu'il n'y a aucun droit.
+- les droits de modification donnent aussi les droits de suppression
+- root à tous les droits
+- `chmod` permet de modifier les droits d'accès. Pas besoin d'être root, il suffit d'être propriétaire du fichier pour modifier les droits d'accès
+- plusieurs méthodes d'attribution des droits
+  - avec des chiffres : r=4, w=2, x=1. On les combine en additionnant, par exemple 6 donne les droits en lecture et écriture. ça va de 0 à 7. `chmod 777 fichier` donne tous les droits à tout le monde, `chmod 000 fichier` ne donne aucun droit à personne, sauf à root
+  - avec des lettres : u=user, g=group, o=other. `+`=ajouter, `-`=supprimer et `=`=affecter. Par exemple `chmod g+w fichier` ajoute le droit en écriture au groupe
+  - `-R` pour affecter récursivement tous les sous-dossiers et fichiers, par exemple `chmod -R 700 /home/louis`
+
+
+## Installer des programmes
