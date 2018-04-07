@@ -1,11 +1,11 @@
 # Tutoriel Linux
 
-
 ## Raccourcis utiles
+- `Alt + Ctrl + T` permet d'ouvrir un terminal
+- `Ctrl + D` fin de fichier, ou `exit`. ferme le terminal
 - `Tab` permet de faire de l’auto-complétion
 - `Ctrl + R` permet de faire une recherche parmi les commandes précédentes
 - `Ctrl + C` arrête la commande en cours
-- `Ctrl + D` fin de fichier
 - `Ctrl + L` ou `clear` efface le contenu de la console
 - `Shift + PgUp` et `Shift + PgDown` pour monter et descendre dans la console
 
@@ -180,10 +180,24 @@ Le *.profile* fait appel au *.bashrc* par défaut, donc faire des modifications 
 Chaque personne à son propre compte utilisateur avec des droits limités. Il existe un super-utilisateur appelé *root* qui a tous les droits, qui ne doit servir que rarement, lorsque c'est nécessaire.
 
 - `sudo` pour *Substitute User DO* ou encore faire en se substituant à l'utilisateur, permet de devenir *root temporairement* le temps d'exécuter une commande en faisant `sudo commande`
-- `sudo su` permet de devenir root et de le rester dans Ubuntu
-  - `su -` est suffisant dans les autres distributions, le tiret rend accessible certains programmes destinés seulement à root, et nous place  dans le dossier personnel de root (*/root*)
+- `sudo su` pour *switch user*, permet de devenir root et de le rester dans Ubuntu
+  - `su -` est suffisant dans les autres distributions, le tiret rend accessible certains programmes destinés seulement à root, et nous place dans le dossier personnel de root (*/root*)
   - le symbole `#` à la fin de l'invite de commandes indique que l'on est devenu super-utilisateur
-  - `exit` permet de quitter le *mode root*
+  - `exit` permet de quitter le *mode root*, permet aussi de fermer la console dans une session normale
+  - `su - test` permet de se connecter avec le compte utilisateur *test*, le tiret indique que l'on souhaite utiliser ses variables d'environnement
+- `whoami` permet de savoir avec quel utilisateur on est connecté
+- `id` permet d'afficher l'UID (User Identification), le GID (Group Identification) et la liste de groupe secondaires de l'utilisateur connecté, par exemple affiche `uid=1000(gaetan) gid=1000(gaetan) groupes=1000(gaetan),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),113(lpadmin),130(sambashare)`
+  - `id user` affiche les mêmes informations pour l'utilisateur *user*
+  - `id -u` affiche uniquement le numéro uid
+  - `id -g` affiche uniquement le numéro gid
+  - `id -gn` affiche uniquement le nom du groupe
+  - `id -Gn` ou `groups` affiche les noms des groupes dont l'utilisateur est membre
+- `finger user` affiche les données GECOS de *user*, c'est-à-dire son login, son nom, son home, son shell, etc...
+- le fichier **/etc/passwd** contient les informations des utilisateurs concernant leur connexion, par exemple : `gaetan:x:1000:1000:Gaëtan Varlet,,,:/home/gaetan:/bin/bash`.
+  - utilisateur root, uid=0
+  - utilisateurs système, uid compris entre 1 et 99
+  - utilisateurs normaux avec uid supérieur ou égal à 1000
+- les mdp sont dans le fichier **/etc/shadow**, uniquement accessible par root
 
 ### Gestion des utilisateurs
 - commandes réservés à root
@@ -193,23 +207,25 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
 - `passwd` permet de changer le mot de passe du compte en paramètre, par exemple `passwd louis`
   - sans paramètre, c'est le mdp de l'utilisateur connecté que l'on modifie
 - `deluser` permet de supprimer un compte, par exemple `deluser louis`
-  - ne supprime pas le répertoire personnel. Si on souhaite le faire, ajouter l'option `--remove-home`, par exemple `deluser --remove-home louis`
+  - ne supprime pas le répertoire personnel. Si on souhaite le faire, ajouter l'option `--remove-home`, par exemple `deluser --remove-home louis` ou encore `userdel -r louis`
 - `adduser` et `deluser` n'existent que sous Debian et ses descendants dont Ubuntu. Ailleurs, il faut utiliser les commandes Unix traditionnelles `useradd` et `userdel` qui font la même chose de manière plus basique, par exemple il faut appeler `passwd` pour définir un mdp et activer le compte
 
 ### Gestion des groupes
 - chaque utilisateur appartient à un groupe. Par défaut, un groupe du même nom que l'utilisateur est créé
 - `addgroup` permet de créer un groupe, par exemple `addgroup famille`
+- `delgroup` permet de supprimer un groupe, par exemple `delgroup famille`
 - `usermod` permet de modifier un utilisateur
    - `-l` renomme l'utilisateur sans renommer son répertoire personnel
    - `-g` change de groupe, par exemple `usermod -g famille louis` pour mettre Louis dans le groupe famille et `usermod -g louis louis` pour le remettre dans le groupe louis
    - `-G` permet à un utilisateur d'avoir plusieurs groupes, par exemple `usermod -G famille,amis louis`. L'utilisateur ne sera plus dans les groupes dans lesquels il était avant.
    - `-a` permet d'ajouter des groupes à un utilisateur sans perdre les groupes auxquels il appartient, par exemple `usermod -aG famille louis`
-- `delgroup` permet de supprimer un groupe, par exemple `delgroup famille`
+- `gpasswd -d` permet de supprimer l'appartenance d'un utilisateur à un groupe, par exemple `gpasswd -d louis audio`
+- le fichier **/etc/group** contient la liste des groupes avec leur GID et la liste de des membres des groupes
 - `addgroup` et `delgroup` n'existent que sous Debian et ses dérivés. Les commandes traditionnelles sont `groupadd` et `groupdel` qui offrent moins d'options
 
 ### Gestion des propriétaires d'un fichier
 - seul l'utilisateur root peut changer le propriétaire d'un fichier
-- `chown` permet de changer le propriétaire d'un fichier, en renseignant le nom du nouveau propriétaire et le nom du fichier, par exemple `chown louis fichier`. Cela ne change pas le groupe du fichier
+- `chown` pour *change owner*, permet de changer le propriétaire d'un fichier, en renseignant le nom du nouveau propriétaire et le nom du fichier, par exemple `chown louis fichier`. Cela ne change pas le groupe du fichier
   - `chown louis:famille fichier` permet de changer le propriétaire et le groupe en même temps
   - `-R` pour *recursive* permet d'affecter tous les sous-dossiers et fichiers contenu dans le dossier, par exemple `chown -R louis:louis /home/gaetan/dossier/`
 - `chgrp` permet de changer le groupe propriétaire du fichier, par exemple `chgrp famille fichier`
@@ -218,7 +234,9 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
 - chaque fichier et dossier possède des droits : voir, modifier et exécuter
 - la commande `ls -l` permet de voir les droits, il s'agit des 10 premiers caractères
   - le 1er **d** pour *directory* si c'est un dossier, **l** pour *link* ou **-** si c'est un fichier
-  - 3 triplets qui correspondent aux droits de l'utilisateur, du groupe et des autres. Un triplet correspond à **rwx** pour *read*, *write* et *execute* Ce dernier n'est utile que pour les fichiers exécutables (programmes et scripts). Si c'est un dossier, indique qu'on peut le traverser, c-a-d voir les sous-dossiers qu'il contient si on a les droits en lecture dessus. Si la lettre apparaît, c'est que le droit existe. S'il y a un tiret à la place, c'est qu'il n'y a aucun droit.
+  - 3 triplets qui correspondent aux droits de l'utilisateur, du groupe et des autres. Un triplet correspond à **rwx** pour *read*, *write* et *execute* Ce dernier n'est utile que pour les fichiers exécutables (programmes et scripts).
+  - si la lettre apparaît, c'est que le droit existe. S'il y a un tiret à la place, c'est qu'il n'y a aucun droit.
+  - si c'est un dossier, *x* indique qu'on peut se placer dans le répertoire avec la commande `cd`, et voir son contenu si on a les droits en lecture dessus *r*.
 - les droits de modification donnent aussi les droits de suppression
 - root à tous les droits
 - `chmod` permet de modifier les droits d'accès. Pas besoin d'être root, il suffit d'être propriétaire du fichier pour modifier les droits d'accès
@@ -226,6 +244,19 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
   - avec des chiffres : r=4, w=2, x=1. On les combine en additionnant, par exemple 6 donne les droits en lecture et écriture. ça va de 0 à 7. `chmod 777 fichier` donne tous les droits à tout le monde, `chmod 000 fichier` ne donne aucun droit à personne, sauf à root
   - avec des lettres : u=user, g=group, o=other. `+`=ajouter, `-`=supprimer et `=`=affecter. Par exemple `chmod g+w fichier` ajoute le droit en écriture au groupe
   - `-R` pour affecter récursivement tous les sous-dossiers et fichiers, par exemple `chmod -R 700 /home/louis`
+- `umask` permet de voir les permissions par défaut. Un fichier créé ne peut avoir de base les droits d'exécution.
 
 
 ## Installer des programmes
+
+- **paquet** : c'est un programme « prêt à l'emploi », l'équivalent des programmes d'installation sous Windows en quelque sorte. C'est une sorte de dossier zippé qui contient tous les fichiers du programme. Il se présente sous la forme d'un fichier *.deb* et contient toutes les instructions nécessaires pour installer le programme
+- **dépendance** : un paquet peut avoir besoin de plusieurs autres paquets pour fonctionner, on dit qu'il a des dépendances
+- **dépôt** : c'est le serveur sur lequel on va télécharger nos paquets
+
+- programme graphique qui gère les paquets ou utiliser un programme en ligne de commande comme **apt-get** ou **aptitude**
+
+- `apt-get update` met à jour le cache (liste des paquets existant proposé par le dépôt)
+- `apt-cache search paquetRecherché` recherche le paquet que l'on veut télécharger si on ne connait pas le nom exact
+- `apt-get install monPaquet` télécharge et installe le paquet
+- `apt-get upgrade` met à jour tous les paquets installés, après avoir fait un `apt-get update` car *apt-get* comapre la version des paquets installés avec ceux présents dans le cache
+- `apt-get autoremove monPaquet` permet de désinstaller un paquet et les dépendances devenues inutiles alors `apt-get remove monPaquet`ne supprime que le paquet en paramètre
