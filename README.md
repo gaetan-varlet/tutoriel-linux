@@ -149,6 +149,23 @@
   - `whatis` donne juste le nom de la commande pour comprendre ce qu'elle fait, par exemple `whatis mkdir`
   - `info` affiche un manuel en ligne encore plus complet que *man*, par exemple `info mkdir`
 
+- rechercher des fichiers
+  - `locate fichier` pour une recherche rapide sur la base de données des fichiers qui est mise à jour toutes les 24 heures. Pour la mettre à jour, lancer la commande `sudo updatedb`
+  - `find` pour une recherche approfondie, en parcourant les fichiers sur le disque, ce qui peut être long. La commande s'utilise avec des paramètres `find "où" "quoi" "que faire avec"`. Seul *"quoi"* est obligatoire.
+    - *où* est le dossier dans lequel on fait la recherche, ainsi que tous ses sous-dossiers. Si non renseigné, recherche dans le dossier courant
+    - *quoi* fichier ou dossier à rechercher, par nom, date de création, taille...
+    - *que faire avec* on peut faire un post-traitement. Par défaut, la commande affiche la liste des fichiers trouvés, mais d'autres actions sont possibles
+    - exemples :
+      - `find -name "README.md"` recherche un fichier dans le répertoire courant qui s'appelle exactement *README.md*. On peut utiliser l'étoile pour rechercher des noms incomplets, par exemple : `find -name "READM*"`
+      - `find /var/log/ -name "syslog"`
+      - `find -size +10M` permet de rechercher les fichiers de plus de 10Mo. On peut utiliser le **-** au lieu de **+**, et le **k** ou le **G** à la place du **M**
+      - `find -name "*.md" -atime 6` recherche les fichiers au format markdown modifié il y a moins de 7 jours (0 pour 1 jour). On peut enlever le *-* pour modifié exactement il y a *x* jours
+      - `-type d` et `-type f` permet de limiter la recherche aux répertoires ou au fichier, par exemple `find -name "syslog" -type d`
+      - `find -name "README.md" -print` permet d'afficher les résultats, ce qui correspond au résultat par défaut `find -name "README.md"`
+      - `-printf` permet de formater le résultat affiché, par exemple `find -name "README.md" -printf "%p - %u\n"`
+      - `-delete` permet de supprimer les fichiers trouvés, par exemple `find -name "README.md" -delete`
+      - `-exec`, permet d'appeler une commande qui effectuera une action sur chacun des fichiers trouvés
+
 
 ## Les éditeurs de texte
 Il en existe plusieurs. Les plus connus sont Nano, Vim et Emacs.
