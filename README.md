@@ -129,14 +129,14 @@
   - `rm -r dossier` pour *recursive*, supprime *dossier* et tout son contenu
 
 - `ln` permet de créer des liens (raccourcis) entre fichiers. Il existe 2 types de liens :
-    - **liens physiques** : `ln fichier1 fichier2` crée *fichier2* qui partage le même inode que *fichier1*
+    - **liens physiques** : `ln fichier1 fichier2` crée *fichier2* qui partage le même inode (contenu du fichier) que *fichier1*
       - `ls -i` permet d'afficher le numéro d'inode pour vérifier si les fichiers sont associés au même inode
-      - Une modification dans l'un entraîne une modification dans l'autre. Si on supprime l'un des 2 fichiers, l'autre reste en place et le contenu est touhours le même. Il faut supprimer les 2 pour supprimer le contenu.
+      - Une modification dans l'un entraîne une modification dans l'autre. Si on supprime l'un des 2 fichiers, l'autre reste en place et le contenu est toujours le même. Il faut supprimer les 2 pour supprimer le contenu.
     - **liens symboliques** : `ln -s fichier1 fichier2` pour *symbolique*. Crée *fichier2* qui pointe sur **fichier1**.
       - ressemble davantage au "raccourci" sous Windows, c'est-à-dire qu'on crée un lien vers un autre fichier
       - on édite le même contenu dans *fichier1* et *fichier2*
       - fonctionnent sur des répertoires contrairement aux liens physiques qui ne fonctionnent que sur les fichiers
-      - si on supprime *fichier2*, rien de mal. Si on supprime *fichier1*, *fichier2* pointe vers un fichier qui n'existe plus, on parle de *lien mort*.
+      - si on supprime *fichier2*, rien de mal. Si on supprime *fichier1*, *fichier2* pointe vers un fichier qui n'existe plus, on parle de *lien mort*
 
 - `alias` concerne les alias de commande, qui sont des raccourcis
   - `alias` permet de voir les alias existants
@@ -155,16 +155,20 @@
     - *où* est le dossier dans lequel on fait la recherche, ainsi que tous ses sous-dossiers. Si non renseigné, recherche dans le dossier courant
     - *quoi* fichier ou dossier à rechercher, par nom, date de création, taille...
     - *que faire avec* on peut faire un post-traitement. Par défaut, la commande affiche la liste des fichiers trouvés, mais d'autres actions sont possibles
+    - `-iname` option qui permet d'ignorer la casse pour faire la recherche, par exemple `find /etc/ -iname 'readme'`
     - exemples :
       - `find -name "README.md"` recherche un fichier dans le répertoire courant qui s'appelle exactement *README.md*. On peut utiliser l'étoile pour rechercher des noms incomplets, par exemple : `find -name "READM*"`
       - `find /var/log/ -name "syslog"`
+      - `find /etc -type d` permet d'afficher tous les répertoires et sous-répertoires du dossier
       - `find -size +10M` permet de rechercher les fichiers de plus de 10Mo. On peut utiliser le **-** au lieu de **+**, et le **k** ou le **G** à la place du **M**
       - `find -name "*.md" -atime 6` recherche les fichiers au format markdown modifié il y a moins de 7 jours (0 pour 1 jour). On peut enlever le *-* pour modifié exactement il y a *x* jours
-      - `-type d` et `-type f` permet de limiter la recherche aux répertoires ou au fichier, par exemple `find -name "syslog" -type d`
+      - `-type d` et `-type f` permet de limiter la recherche aux répertoires ou aux fichiers, par exemple `find -name "syslog" -type d`
       - `find -name "README.md" -print` permet d'afficher les résultats, ce qui correspond au résultat par défaut `find -name "README.md"`
       - `-printf` permet de formater le résultat affiché, par exemple `find -name "README.md" -printf "%p - %u\n"`
       - `-delete` permet de supprimer les fichiers trouvés, par exemple `find -name "README.md" -delete`
       - `-exec`, permet d'appeler une commande qui effectuera une action sur chacun des fichiers trouvés
+        - `find /bin -size +200k -exec ls -l \{} \;` permet d'effectuer un `ls -l` sur les résultats de la recherche. {} symbolise le résultat de la recherche
+        - `find /bin -size +200k | xargs ls -l`. `xargs` sert à construire et exécuter des lignes de commande à partir de l’entrée standard
 
 - manipulations dans les fichiers
 
@@ -173,6 +177,7 @@
     - `-i` pour ne pas tenir compte de la casse, `grep -i texte fichier`
     - `-n` pour afficher les numéros de lignes
     - `-v` permet d'inverser la recherche et d'afficher uniquement les lignes qui ne contiennent pas le mot recherché
+    - `-c` permet de compter le nombre de lignes au lieu de les afficher
     - `-r` permet de faire une recherche récursive dans tous les sous-dossiers et fichiers, par exemple `grep -r machaine dossier/`. Le nom du fichier où la chaîne a été trouvé s'affiche au début de la ligne
     - `-E` permet d'utiliser des expressions régulières
       - on peut utiliser `egrep` à la place de `grep -E`
@@ -205,7 +210,6 @@
   - `cut` permet de couper les lignes d'un fichier afin de conserver uniquement une partie de chaque ligne
     - `-c` pour couper selon le nombre de caractères. `cut -c 2-5 noms.txt` affiche les caractères 2 à 5 de chaque ligne, `cut -c -3` du 1er au 3 et `cut -c 3-` du 3e au dernier
     - couper selon un délimiteur, `-d` pour préciser le délimiteur, `-f` pour indiquer le numéro du ou des champs à couper. `cut -d , -f 1 fichier` conserve le 1er champ de chaque ligne, `-f 2-4` conserve les champs 2, 3 et 4, `-f 1,3` les champs 1 et 3
-
 
 
 ## Les éditeurs de texte
@@ -318,3 +322,8 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
 - `apt-get install monPaquet` télécharge et installe le paquet
 - `apt-get upgrade` met à jour tous les paquets installés, après avoir fait un `apt-get update` car *apt-get* comapre la version des paquets installés avec ceux présents dans le cache
 - `apt-get autoremove monPaquet` permet de désinstaller un paquet et les dépendances devenues inutiles alors `apt-get remove monPaquet`ne supprime que le paquet en paramètre
+
+
+## Les flux de redirection
+
+Au lieu d'afficher le résultat d'une commande dans la console, on peut le rediriger dans un fichier ou en entrée d'une autre commande pour effectuer des chaînes de commandes.
