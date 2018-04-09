@@ -166,6 +166,47 @@
       - `-delete` permet de supprimer les fichiers trouvés, par exemple `find -name "README.md" -delete`
       - `-exec`, permet d'appeler une commande qui effectuera une action sur chacun des fichiers trouvés
 
+- manipulations dans les fichiers
+
+  - `grep` permet de filtrer des données
+    - `grep texte fichier` permet de chercher *texte* dans *fichier*, par exemple `grep alias .bashrc` permet de chercher le mot *alias* dans le fichier *.bashrc* et affiche toutes les lignes du fichier comportant ce mot
+    - `-i` pour ne pas tenir compte de la casse, `grep -i texte fichier`
+    - `-n` pour afficher les numéros de lignes
+    - `-v` permet d'inverser la recherche et d'afficher uniquement les lignes qui ne contiennent pas le mot recherché
+    - `-r` permet de faire une recherche récursive dans tous les sous-dossiers et fichiers, par exemple `grep -r machaine dossier/`. Le nom du fichier où la chaîne a été trouvé s'affiche au début de la ligne
+    - `-E` permet d'utiliser des expressions régulières
+      - on peut utiliser `egrep` à la place de `grep -E`
+      - `-E` n'est pas obligatoire car les expressions régulières sont activées de base sur Linux. C'est utile sur les autres systèmes Unix
+      - `.` caractère quelconque, `^` début de ligne, `$`fin de ligne, `[]` un des caractères entre les crochets, `?` l'élément précédent est optionnel (peut être présent 0 ou 1 fois), `*` l'élément précédent peut être présent 0, 1 ou plusieurs fois, `+` l²'élément précédent doit être présent 1 ou plusieurs fois, `|` ou, `()` groupement d'expressions
+      - par exemple `grep -E ^alias .bashrc` pour rechercher le mot alias uniquement en début de ligne
+      - `grep -E [Aa]lias .bashrc` renvoie les lignes qui contiennent *alias* ou *Alias*
+      - `grep -E [0-4] .bashrc` renvoie les lignes qui contiennent un chiffre entre 0 et 4
+
+  - `sort` permet de trier les lignes
+    - `sort fichier` trie les lignes du fichier par ordre alphabétique et affiche le résultat dans la console, en ignorant la casse
+    - `-o` permet d'écrire le résultat dans un fichier : `sort -o resultatTrié fichierATrier`
+    - `-r` permet de trier en ordre inverse, `sort -r fichier`
+    - `-R` permet de trier aléatoirement
+    - `-n` permet de trier des nombres. Sans cette option, ils sont triés alphabétiquement donc par exemple 150 serait avant 18
+
+   - `wc` pour *word count* permet de compter le nombre de lignes, de mots, de caractères, d'octets
+    - `wc fichier` retourne le nombre de lignes, de mots et d'octets
+    - `-l` retourne le nombre de lignes, `wc -l fichiers`
+    - `-w` retourne le nombre de mots
+    - `-c` retourne le nombre d'octets
+    - `-m` retourne le nombre de caractères
+
+  - `uniq` permet de supprimer les doublons (lignes identiques) seulement si elles se suivent, il faut donc travailler sur un fichier trié
+    - `uniq fichier` affiche dans la console la liste des lignes sans doublons
+    - `uniq fichierATraiter fichierSansDoublons` enregistre le résultat dans un fichier
+    - `-c` compte le nombre d'occurence, affiche devant chaque ligne le nombre de fois qu'elle est présente dans le fichier, par exemple `uniq -c fichier`
+    - `-d` affiche uniquement les lignes présentes plusieurs fois
+
+  - `cut` permet de couper les lignes d'un fichier afin de conserver uniquement une partie de chaque ligne
+    - `-c` pour couper selon le nombre de caractères. `cut -c 2-5 noms.txt` affiche les caractères 2 à 5 de chaque ligne, `cut -c -3` du 1er au 3 et `cut -c 3-` du 3e au dernier
+    - couper selon un délimiteur, `-d` pour préciser le délimiteur, `-f` pour indiquer le numéro du ou des champs à couper. `cut -d , -f 1 fichier` conserve le 1er champ de chaque ligne, `-f 2-4` conserve les champs 2, 3 et 4, `-f 1,3` les champs 1 et 3
+
+
 
 ## Les éditeurs de texte
 Il en existe plusieurs. Les plus connus sont Nano, Vim et Emacs.
