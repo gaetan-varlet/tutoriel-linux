@@ -326,4 +326,34 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
 
 ## Les flux de redirection
 
-Au lieu d'afficher le résultat d'une commande dans la console, on peut le rediriger dans un fichier ou en entrée d'une autre commande pour effectuer des chaînes de commandes.
+Au lieu d'afficher le résultat d'une commande dans la console (comportement par défaut), on peut le rediriger
+- dans un fichier
+- en entrée d'une autre commande pour effectuer des chaînes de commandes
+- dans la "corbeille", `commande > /dev/null`, tout est supprimé immédiatement, si on ne veut ni l'afficher dans la console ni dans un fichier
+
+- `> et >>` permettent de rediriger le résultat dans un nouveau fichier pour `>` et à la fin d'un fichier pour `>>`
+  - `echo Bonjour` affiche *Bonjour* dans la console
+  - `echo Bonjour > test.txt` enregistre *Bonjour* dans un fichier *test.txt*. Si le fichier existe déjà, il est écrasé
+  - `echo Bonjour >> test.txt` ajoute une ligne au fichier *test.txt*.Si le fichier n'existe pas, il sera créé
+
+- `2>, 2>> et 2>&1` permettent de rediriger les erreurs
+  - toutes les commandes produisent deux flux de données : la **sortie standard** et la **sortie d'erreur**. Par défaut, les deux s'affichent dans la console
+  - avec `> et >>`, seule la sortie standard est redirigée vers le fichier, les erreurs continuent à être affiché dans la console
+  - `2>` permet de rediriger les erreurs dans un fichier à part, par exemple `ls -l /root/ > test 2> erreur` redirige la sortie standard dans le fichier *test* et la sortie d'erreur dans le fichier *erreur*
+  - `2>>` permet d'ajouter les erreurs à la fin du fichier
+  - `2>&1` permet de fusionner les sorties dans un seul fichier, par exemple `ls -l / > testFusion 2>&1`
+
+- `< et <<` permet de lire depuis un fichier pour `<`, et de lire progressivement depuis le clavier pour `<<`
+  - l'entrée d'une commande vient des paramètres de la commande, mais elle peut aussi venir d'un fichier ou d'une saisie au clavier
+  - `cat < fichier` affiche le contenu de *fichier*. La commande *cat* reçoit le contenu du fichier qu'elle affiche, alors que la commande `cat fichier` reçoit le nom du fichier qu'elle doit d'abord ouvrir pour ensuite afficher son contenu. Le résultat est le même mais ce qui se passe derrière est différent
+  - `<<` passe la console en mode saisie au clavier ligne par ligne. Toutes ces lignes seront envoyées à la commande lorsque le mot-clé de fin aura été écrit. Par exemple :
+  `wc -m << FIN
+  Combien de caractères dans cette phrase ?
+  FIN`
+
+- `|` permet de chaîner les commandes
+  - connecter la sortie d'une commande à l'entrée d'une autre commande
+  - exemple : `du | sort -nr | head` permet d'afficher les 10 dossiers les plus lourds triés par taille
+
+
+## Surveiller l'activité du système
