@@ -357,3 +357,76 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
 
 
 ## Surveiller l'activité du système
+
+- `w` permet de voir qui est connecté et ce qu'ils font
+  - l'heure, aussi accessible via `date`
+  - l'uptime, aussi accessible via `uptime`, qui indique depuis combien de temps l'ordinateur n'a pas été redémarré
+  - la charge, aussi accessible via `uptime` et `tload`. Il s'agit de la charge moyenne depuis 1, 5 et 15 minutes, plus précisément le nombre de processus qui réclament le processeur. La charge maximale correspond au nombre de processeur, au delà, il y a surcharge
+  - la liste des personnes connectés sur la machine, accessible aussi via `who`
+
+- `ps` et `top` pour lister les processus
+  - un processus est un programme qui tourne en mémoire. Certains programmes ne font tourner qu'un processus, d'autres plusieurs comme Chrome qui crée un processus par onglet
+  - `ps` permet d'avoir la liste statique des processus
+    - *PID* est l'identifiant du processus
+    - par défaut, seul les processus lancés par l'utilisateur dans la console sont affichés
+    - `ps -ef` permet d'afficher tous les processus et `ps -ejH` de les afficher en arbre
+  - `top` permet d'avoir la liste dynamique des processus
+    - affiche les processus trié sur le taux d'utilisation du processeur
+    - `h` permet d'afficher l'aide
+
+- `Ctrl + C` ou `kill` pour arrêter un processus
+  - `Ctrl + C` permet d'arrêter un processus lancé en console
+  - `kill` permet d'arrêter proprement un processus lancé en arrière-plan en indiquant son *PID*, par exemple `kill 12345`
+    - `kill -9` permet de tuer un processus sans lui laisser le temps de s'arrêter proprement, s'il refuse de se fermer normalement. Par exemple `kill -9 12345`
+    - `killall` permet de tuer tous les processus d'un même programme, par exemple `killall find`
+
+- `halt` et `reboot` permettent d'arrêter et de redémarrer l'ordinateur
+  - il faut être root pour les exécuter
+  - ces deux commandes appellent la commande `shutdown` avec des paramètres spécifiques
+
+
+## Exécuter des programmes en arrière-plan
+
+- `&` permet de lancer un processus en arrière-plan, par exemple `cp fichier copie &`
+  - les messages renvoyés par les commandes s'affichent toujours dans la console. On peut donc les envoyer dans un fichier, par exemple `find / -name "*log" > sortiefind &`
+- `nohup` permet de détacher le processus de la console. Si l'utilisateur se déconnecte ou si la console est fermée, le processus continuera. Exemple : `nohup fichier copie`
+- `Ctrl+Z` met en pause un processus exécuté au premier plan, sans `&` donc
+- `bg` pour *background*, passe le processus en pause en arrière-plan
+- `jobs` permet de connaître les processus qui tournent en arrière-plan
+- `fg` pour *foreground*, permet de reprendre un processus au premier plan
+  - `fg` s'il y a un seul processus en arrière-plan listé dans *jobs*
+  - `fg %x` s'il y a plusieurs processus en arrière-plan pour reprendre le processus *x*
+- `screen` est un programme qui permet d'ouvrir plusieurs consoles virtuelles au sein d'une seule et même console, et d'exécuter facilement plusieurs processus en parallèle
+
+
+## Exécuter des programmes à une heure différée
+
+- `date` permet d'afficher la date
+  - `date "+%H:%M:%S"` permet de personnaliser l'affichage
+  - `sudo date MMDDhhmmYYYY` permet de modifier la date système
+- `at` permet d'exécuter une commande plus tard une seule fois
+  - 1) on indique quand on veut exécuter la commande, par exemple `at 18:17` ou `at 18:17 tomorrow` ou `at 18:17 04/12/18` (12 avril, attention à l'ordre MM/DD/YY) ou encore `at now +5 minutes` (minutes, hours, days, weeks, months, years)
+  - 2) taper la ou les commandes que l'on veut exécuter à cette heure là
+  - 3) faire `Ctrl + D`. Le symbole `<EOT>` s'affiche et nous donne le numéro de la tâche (job en anglais)
+- `atq` permet d'avoir la liste des jobs en attente
+- `atrm` permet de supprimer un job en attente, par exemple `atrm 5` pour supprimer le job n°5
+- il est possible d'enchaîner des commandes :
+  - avec le point-virgule, par exemple `touch fichier; rm fichier`
+  - avec les `&&`, par exemple `touch fichier && sleep 10 && rm fichier`. Les instructions ne s'enchaîneront que si elles se sont correctement exécutées
+- `sleep` permet de faire une pause, par exemple `touch fichier; sleep 10; rm fichier` ou une pause de 10 secondes aura lieu
+  - on peut régler l'unité de sleep qui est par défaut la seconde : `m` pour minute, `h` pour heure et `d` pour jour. Exemple : `sleep 1m`
+- `crontab` permet exécuter une commande régulièrement
+  - `crontab` permet de lire et modifier un fichier appelé la **crontab**, qui contient la liste des programmes à exécuter régulièrement, et l'heure à laquelle ils soient exécutés
+  - `-l` permet d'afficher la crontab, `-e` la modifier, `-r` la supprimer sans confirmation
+  - syntaxe : `m h dom mon dow   command` pour minute (0-59), hour (0-23), day of month (1-31), month (1-12), day of week (0-6, 0=dimanche)
+    - on peut mettre une étoile à la place d'un chiffre pour dire tous les chiffres
+    - `3,5,10` pour les 3 valeurs, `3-7` pour les valeurs 3 à 7, `*/3` pour les multiples de 3, par exemple 0, 3, 6, 9...
+  - le résultat de la commande n'apparaît pas dans la console, il est normalement envoyé par mail
+    - le rediriger dans un fichier : `45 18 * * * touch /home/louis/fichier >> /home/louis/cron.log 2>&1`
+    - le rediriger dans le trou noir pour suppression immédiate : `* * * * * commande > /dev/null 2>&1`
+  - exemples :
+    - `45 18 * * * commande` est exécuté tous les jours à 18h45
+    - `0 0 * * 1 commande` tous les lundis à minuit (nuit de dimanche à lundi)
+    - `0 4 1 * * commande` tous les premiers du mois à 4h
+    - `0 4 * 12 * commande` tous les jours du mois de décembre
+    - `* * * * *` toutes les minutes, c'est la fréquence minimale
