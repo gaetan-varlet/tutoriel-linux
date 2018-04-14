@@ -323,6 +323,21 @@ Chaque personne à son propre compte utilisateur avec des droits limités. Il ex
 - `apt-get upgrade` met à jour tous les paquets installés, après avoir fait un `apt-get update` car *apt-get* comapre la version des paquets installés avec ceux présents dans le cache
 - `apt-get autoremove monPaquet` permet de désinstaller un paquet et les dépendances devenues inutiles alors `apt-get remove monPaquet`ne supprime que le paquet en paramètre
 
+**Programmes absents des dépôts officiels**
+Si un programme est absent des dépôts officiels, on peut parfois trouver sur le site web du logiciel un paquetage **.deb**, spécifique à Debian et ses distributions dérivées. Par exemple, Red Hat utilise des **.rpm**.
+- télécharger le *.deb* et double-cliquer dessus.
+  - s'il n'y a pas d'erreurs, on peut installer le programme
+  - sinon, le programme ne correspond pas à notre machine (32 bits au lieu de 64 bits par exemple) ou alors qu'il manque des dépendances qu'il faut installer manuellement
+
+Si le *.deb* n'est pas disponible, il faut alors récupérer le code source du programme et le compiler pour avoir un exécutable pour sa machine
+- le programme **build-essential** est nécessaire pour compiler le code source d'un programme
+- trouver le code source sur le site du programme et le télécharger, et éventuellement le décompresser
+  - exécuter le programme *configure* avec la commande `./configure`. Cela analyse notre ordinateur et vérifie si tous les outils nécessaires à la compilation du logiciel que l'on souhaite installer sont bien présents
+  - s'il y a une erreur, il y a sûrement des paquets manquants. Il faut le trouver, l'installer puis relancer `./configure` jusqu'à qu'il n'y ait plus d'erreurs
+  - une fois qu'il n'y a plus d'erreur, lancer la compilation avec la commande `make` qui crée l'exécutable
+  - installer le programme avec la commande `sudo make install`. Une fois terminé, le programme est installé et on peut le lancer en écrivant son nom dans la ligne de commande
+  - pour le désinstaller, exécuter la commande `sudo make uninstall` depuis le répertoire où il a été compilé. Si on supprime le répertoire avec le code source, on ne pourra plus lancer la commande de désinstallation
+
 
 ## Les flux de redirection
 
