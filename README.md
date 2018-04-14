@@ -430,3 +430,51 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
     - `0 4 1 * * commande` tous les premiers du mois à 4h
     - `0 4 * 12 * commande` tous les jours du mois de décembre
     - `* * * * *` toutes les minutes, c'est la fréquence minimale
+
+
+## Archiver et compresser
+
+- `tar` est un programme d'archivage. Il permet :
+  - d'assembler des fichiers dans une archive
+    - regroupement des fichiers dans un même dossier
+    - création de l'archive tar : `tar -cvf nomArchive.tar nomDossier/`. `-c` pour la création de l'archive, `-v` pour l'affichage des détails de l'opération et `-f` pour assembler l'archive dans un fichier
+  - d'afficher le contenu d'une archive sans l'extraire, par exemple `tar -tf archive.tar`
+  - d'ajouter un fichier à une archive existante, par exemple `tar -rvf archive.tar nouveauFichier`
+  - d'extraire les fichiers d'une archive, par exemple `tar -xvf archive.tar` avec `-x` pour *extract*. Le contenu de l'archive est extrait dans le répertoire courant
+
+Les différents programmes de compression d'une archive
+- **gzip** est le plus connu et le plus utilisé
+  - `gzip archive.tar` compresse l'archive qui devient *archive.tar.gz*
+  - `gunzip archive.tar.gz` décompresse l'archive qui redevient *archive.tar*
+- **bzip2** compresse mieux mais plus lentement
+  - `bzip2 archive.tar` compresse l'archive qui devient *archive.tar.bz2*
+  - `bunzip2 archive.tar.bz2` décompresse l'archive qui redevient *archive.tar*
+- **compress** n'est plus utilisé car moins performant que *gzip* et *bzip2*
+- contrairement à *zip* et *rar*, *gzip* et *bzip2* ne peuvent compresser qu'un seul fichier à la fois, c'est pour cela qu'il faut créer une archive *tar* auparavant
+
+Archiver et compresser en même temps avec *tar*
+- avec *gzip*
+  - `-zcvf` permet d'archiver et compresser, par exemple `tar -zcvf nomArchive.tar.gz nomDossier/`
+  - `-zxvf` permet de décompresser, par exemple `tar -zxvf nomArchive.tar.gz`
+- avec *bzip2*
+  - `-jcvf` permet d'archiver et compresser, par exemple `tar -zcvf nomArchive.tar.bz2 nomDossier/`
+  - `-jxvf` permet de décompresser, par exemple `tar -zxvf nomArchive.tar.bz2`
+
+Lecture d'un fichier compressé
+- on peut compresser directement un fichier en faisant `gzip fichier`
+- si on veut le lire, par exemple en faisant `cat fichier`, des caractères bizarres s'affichent à cause de la compression. A la place, on peut utiliser *zcat*, *zmore* ou *zless* qui permettent de lire un fichier compressé. Exemple `zmore fichier`
+
+Décompresser les *zip* et les *rar*
+- `unzip` permet de décompresser un *.zip*
+  - exemple `unzip archive.zip`
+  - `-l` permet d'afficher le contenu sans l'extraire, par exemple `unzip -l archive.zip`
+- `zip` permet de créer un *zip*, par exemple `zip -r dossier.zip dossier/`
+- `unrar` permet de décompresser un *rar*
+   - exemple `unrar e toto.rar` sans tiret devant le *e*
+   - `unrar l toto.rar` permet d'afficher le contenu sans l'extraire
+- il n'est pas possible gratuitement de créer des *rar* car c'est un format propriétaire. Le paquet *rar* est payant
+
+
+## Les connexions à distance
+
+On peut configurer une machine Linux pour s'y connecter à distance à condition qu'elle reste allumée
