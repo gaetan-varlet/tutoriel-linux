@@ -477,4 +477,68 @@ Décompresser les *zip* et les *rar*
 
 ## Les connexions à distance
 
-On peut configurer une machine Linux pour s'y connecter à distance à condition qu'elle reste allumée
+### Les protocoles
+
+- on peut configurer une machine Linux pour s'y connecter à distance à condition qu'elle reste allumée
+- pour communiquer entre eux, deux ordinateurs doivent utiliser le même **protocole**
+  - il en existe plein, par exemple *HTTP* pour s'échanger des pages web, *FTP* protocole de transfert de fichier, *IMAP* protocole pour s'échanger des emails...
+  - **Telnet** est un protocole simple créé dans les années 80 pour échanger des messages en clair d'une machine à une autre, qui peuvent donc être interceptés et lus par n'importe qui
+  - **SSH** est un protocole qui permet de chiffrer les échanges
+    - création d'un tunnel sécurisé avec SSH (tout ce fait automatiquement) :
+      - utilisation du chiffrement asymétrique pour s'échanger une clé de chiffrement symétrique :
+        - le serveur envoie la clé publique en clair au client pour qu'il puisse chiffrer
+        - le client génère une clé de chiffrement symétrique qu'il chiffre grâce à la clé publique qu'il a reçue, et l'envoi au serveur, qui déchiffre la clé reçue grâce à sa clé privée
+        - ensuite, utilisation du chiffrement symétrique pour chiffrer tous les échanges car le chiffrement asymétrique est beaucoup plus lent que le chiffrement symétrique.
+        - une fois le tunnel mis en place, le client peut se connecter au serveur avec son login et son mot de passe
+
+### Transformer sa machine en serveur et s'y connecter en SSH²
+
+- transformer son pc en serveur : il faut installer le paquet *openssh-server* `sudo apt-get install openssh-server`
+  - normalement, le serveur SSH sera lancé à chaque démarrage
+  - `sudo /etc/init.d/ssh start` permet de le lancer à tout moment
+  - `sudo /etc/init.d/ssh stop` permet de l'arrêter à tout moment
+  - au besoin, le fichier de configuration se trouve dans */etc/ssh/ssh_config*. Il faut ensuite recharger SSH avec la commande `sudo /etc/init.d/ssh reload` pour que les changements soient pris en compte
+
+- se connecter via SSH à partir d'une machine Linux
+  - `ssh login@ip` en remplaçant *login* par notre login et *ip* par l'adresse IP de notre ordinateur que l'on peut obtenir par exemple via le site *www.whatismyip.com* ou l'IP locale si on se connecte depuis un autre ordinateur sur le même reseau local
+  - `ssh login@localhost` ou `ssh login@127.0.0.1` permet de se connecter depuis son propre PC
+  - `exit` ou `logout` permet de se déconnecter
+  - le port 22 est le port utilisé par défaut par SSH. Si le serveur tourne sur un autre port, il faut le préciser comme ceci : `ssh login@ip -p 12345` si le serveur  fonctionne sur le port 12345
+  - le *fingerprint* du serveur, ou empreinte, est un numéro unique qui permet d'identifier le serveur. Si quelqu'un essaie de se faire passer pour le serveur, le fingerprint changera et on sera averti
+
+- se connecter via SSH à partir d'une machine Windows
+  - renseigner l'adresse IP dans *Host Name* et le port (22 par défaut)
+  - lors de la première connexion, Putty nous demande une confirmation en nous donnant l'empreinte du serveur
+  - le serveur demande le login et le mot de passe. La connexion est maintenant établie
+
+### L'identification automatique par clé
+
+- Les méthodes les plus utilisées pour s'authentifier auprès du serveur sont
+  - l'authentification par mot de passe
+  - l'authentification par clés publique et privée du **client**.
+    - cette méthode évite de renseigner son mot de passe à chaque fois
+    - la clé publique ainsi générée doit être envoyée sur le serveur, la clé privée reste sur le PC du client. La connexion se fait alors sans mot de passe et reste sécurisée
+
+- Authentification par clé depuis Linux
+  - générer une paire de clés publique/privée avec la commande `ssh-keygen -t rsa` sur le client
+    - *rsa* étant un algorithme de chiffrement asymétrique, on peut aussi utiliser *dsa* qui est un autre algorithme de chiffrement
+    - les clés sont enregistrées dans des fichiers. Laisser les valeurs par défaut, *~/.ssh/id_rsa.pub* pour la clé publique et *~/.ssh/id_rsa* pour la clé privée. Le dossier *.ssh/* contient aussi un fichier *known_hosts* qui est la liste des fingerprint que votre PC de client tient à jour
+    - on nous demande une **passphrase** qui sert à chiffrer la clé privée pour plus de sécurité. On peut ne pas la renseigner si personne d'autre n'utilise le PC ou ne peut lire le fichier contenant la clé privée.
+  - envoyer la clé publique au serveur, pour qu'il puisse chiffrer les messages qu'il nous envoi
+    - `ssh-copy-id -i id_rsa.pub login@ip` avec le login et l'ip du serveur
+    - on envoie la clé publique *id_rsa.pub* sur le serveur dans son fichier *authorized_keys*
+    - on peut maintenant se connecter avec la commande `ssh login@ip`. Si on n'a pas mis de passphrase on est directement connecté, sinon il faut renseigner la passphrase
+    - pour éviter de renseigner la passphrase à chaque fois, on peut utiliser **l'agent SSH** qui permet de la renseigner une seule fois. C'est un programme qui tourne en mémoire qui retient les clés privées pendant toute la durée de la session. Lancer le programme avec `ssh-add` sur le client, qui va lire notre clé privée et va nous demander notre passphrase pour la déchiffrer. On peut maintenant se connecter plusieurs fois sur le même serveur ou sur différents serveurs sans retaper le passphrase
+
+- Authentification par clé depuis Windows avec Putty
+  - même principe : générer une paire de clés publique/privée sur le client et envoyer la clé publique au serveur
+  - générer la paire de clé avec *Puttygen* en laissant les valeurs par défaut.
+    - on peut éventuellement renseigner une passphrase
+    - enregistrer les clés dans des fichiers, par exemple *cle.pub* et *cle.ppk*
+    - se connecter au serveur avec son login/mdp et ajouter la clé publique dans les clé autorisées à la fin du fichier : `cd .ssh` pour aller dans le dossier *.ssh* de notre dossier personnel puis `echo "cle_publique" >> authorized_keys`
+    - se déconnecter pour configurer Putty pour se connecter avec la clé. Dans *Connection → SSH → Auth*, indiquer le chemin du fichier contenant la clé privée,  et dans *Connection → Data* renseigner le login dans *Auto-login username*
+    - se connecter en cliquant sur Open, le login est déjà renseigné, il faut renseigner la passphrase
+    - pour éviter de renseigner la passphrase à chaque fois, on peut utiliser **l'agent SSH Pageant** , installé avec Putty. Il est possible de le lancer automatiquement au démarrage. Cliquer sur *addkey*, préciser l'emplacement du fichier et renseigner la passphrase. Se connecter à un serveur en sélectionnant *Saved Sessions*
+
+
+## Transférer des fichiers
