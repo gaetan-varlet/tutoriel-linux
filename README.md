@@ -556,4 +556,40 @@ Décompresser les *zip* et les *rar*
     - pour éviter de renseigner la passphrase à chaque fois, on peut utiliser **l'agent SSH Pageant** , installé avec Putty. Il est possible de le lancer automatiquement au démarrage. Cliquer sur *addkey*, préciser l'emplacement du fichier et renseigner la passphrase. Se connecter à un serveur en sélectionnant *Saved Sessions*
 
 
-## Transférer des fichiers
+## Le transfert de fichiers
+
+- `wget` permet de télécharger des fichiers en indiquant l'adresse HTTP ou FTP
+  - exemple `wget https://thumbs.dreamstime.com/z/chat-mignon-2507126.jpg`
+  - `-c` permet de reprendre un téléchargement arrêté si le bout de fichier téléchargé est toujours là : `wget -c adresseHttp`
+  - `--background` permet de laner un téléchargement en tâche de fond (tout comme la commande *nohup*)
+
+- `scp` pour *secure copy*, permet de copier des fichiers sur le réseau d'un ordinateur à un autre de manière sécurisée
+    - `rcp` pour *remote copy* fait la même chose sans cryptage
+    - syntaxe : `scp origine destination`, sous la forme `login@ip:nom_fichier`. Le login et l'IP sont facultatifs. S'ils sont absents, la commande considère que le fichier est sur notre ordinateur
+    - exemple :
+      - `scp louis@12.345.67.890:image.png copie.png` copie l'image sur l'ordinateur distant sur mon ordinateur sous le nom *copie.png*
+      - `scp louis@12.345.67.890:image.png .` fait la même copie sans changer le nom du fichier, le `.` signifie répertoire courant
+    - si le serveur SSH sur lequel on se connecte n'est pas sur le port par défaut (22), il faut indiquer le numéro de port avec `-P`. Par exemple `scp -P 12345 louis@12.345.67.890:image.png .` avec un P majuscule contrairement à la commande `ssh` qui utilise le p minuscule pour le port
+
+- `ftp` et `sftp` permettent de transférer des fichiers
+  - Le FTP pour *File Transfer Protocol* est un protocole permettant d'échanger des fichiers sur le réseau. Il est assez ancien (1985) et toujours utilisé à l'heure actuelle pour transférer des fichiers
+  - On l'utilise pour télécharger depuis un serveur FTP public, notamment lorsqu'on clique sur un lien de téléchargement via un navigateur. La connexion se fait alors en **mode anonyme**. On l'utilise aussi pour transférer des fichiers vers un serveur FTP privé (et aussi télécharger). La connexion se fait donc en **mode authentifié**
+  - **FileZilla** est un logiciel graphique qui permet de faire des transferts de fichiers via FTP
+  - `ftp adresseServeurFtp` permet de se connecter à un serveur FTP
+    - exemple : `ftp speedtest.tele2.net` ou via un navigateur web `ftp://speedtest.tele2.net/`
+    - sur les serveur public, le login est toujours **anonymous** et pour le mot de passe, tout fonctionne. On fait ensuite face à un prompt `ftp>`
+  - les commandes sont pour la plupart les mêmes que celles qu'on connait : `ls` liste les fichiers du répertoire courant, `pwd` affiche le chemin du répertoire actuel, `cd` change de répertoire...
+  - pour utiliser les commandes sur son poste, il faut ajouter un point d'exclamation au début, par exemple `!pwd` pour savoir dans quel répertoire on est sur notre ordinateur
+  - `put` et `get` permettent d'envoyer un fichier vers le serveur et de télécharger un fichier depuis le serveur
+    - exemple : `get fichier.zip` pour télécharger *fichier.zip*
+  - `delete` permet de supprimer un fichier et non `rm`
+  - `bye`, `exit`, `quit` et `Ctrl+D` permet de fermer la session
+  - `sftp` est un FTP sécurisé contrairement à FTP ou les données circulent en clair
+    -  repose sur SSH pour sécuriser la connexion : `sftp login@ip` et on nous demande ensuite notre mot de passe (ou connexion via clé publique/privée)
+    - les commandes sont globalement les mêmes qu'avec `ftp`, sauf pour supprimer un fichier, il faut utiliser `rm` et non plus `delete`
+    - par défaut, on utilise le port 22 comme pour SSH. Si le port est différent, il faut le préciser comme ceci : `sftp -oPort=27401 login@ip`
+
+- `rsync` permet de synchroniser des fichiers pour une sauvegarde
+   - permet d'effectuer une synchronisation entre deux répertoires, que ce soit sur le même PC ou entre deux ordinateurs reliés en réseau
+   - utilisé pour effectuer des sauvegardes incrémentielles : *rsync* compare et analyse les différences entre deux dossiers puis copie uniquement les changements
+   - 
