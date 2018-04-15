@@ -592,4 +592,18 @@ Décompresser les *zip* et les *rar*
 - `rsync` permet de synchroniser des fichiers pour une sauvegarde
    - permet d'effectuer une synchronisation entre deux répertoires, que ce soit sur le même PC ou entre deux ordinateurs reliés en réseau
    - utilisé pour effectuer des sauvegardes incrémentielles : *rsync* compare et analyse les différences entre deux dossiers puis copie uniquement les changements
-   - 
+   - `rsync -arv dossierASauvegarder/ backup/` fait une sauvegarde dans un autre dossier du même ordinateur
+    - `-a` conserve les infos sur les fichiers (droits, date de modification...)
+    - `-r` pour sauvegarder tous les sous-dossiers
+    - `-v` mode verbeux pour afficher les détails
+  - par défaut,`rsync` ne supprime pas les fichiers dans le répertoire de copie. Il faut ajouter l'option `--delete`. Exemple : `rsync -arv --delete dossierASauvegarder/ backup/`
+  - sauvegarder les fichiers supprimés
+    - `--backup` garde de côté les fichiers supprimés qui prennent un suffixe dans le répertoire de sauvegarde
+    - `--backup-dir=/chemin` déplace les fichiers supprimés dans un dossier dédié. Exemple : `rsync -arv --delete --backup --backup-dir=/home/louis/backups_supprimes Images/ backups/`
+  - `--exclude` permet d'exclure un dossier de la sauvegarde
+  - `rsync` permet de sauvegarder sur un autre ordinateur, le plus couramment en utilisant SSH
+    - `rsync -arv --delete --backup --backup-dir=/home/louis/fichiersSupprimes Images/ louis@ip:backup/`
+    - `rsync -arv --delete --backup --backup-dir=/home/louis/fichiersSupprimes Images/ louis@ip:backup/ -e "ssh -p 12345"` si le serveur SSH écoute sur un autre port que celui par défaut
+
+
+## Le réseau
