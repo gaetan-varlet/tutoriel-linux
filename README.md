@@ -629,11 +629,13 @@ Décompresser les *zip* et les *rar*
     - `-l` permet de filter uniquement les connexions à l'état *LISTEN*
     - `netstat -s` permet d'avoir des statistiques résumées
 
-- `iptables` est un pare-feu Linux. Il permet d'établir des règles
-  - à quels ports on peut se connecter à votre ordinateur
-  - à quels ports vous avez le droit de vous connecter
-  - filtrer par IP
-- `iptables -L` affiche les règles actuellement en place
-  - *Chain INPUT* correspond aux règles manipulant le trafic entrant, *Chain FORWARD* correspond aux règles manipulant la redirection du trafic, *Chain OUTPUT* correspond aux règles manipulant le trafic sortant
-  - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
-  - *iptables -F* permet de réinitialiser toutes les règles iptables
+- `iptables` est un pare-feu Linux.
+  - Il permet d'établir des règles
+    - à quels ports on peut se connecter à votre ordinateur
+    - à quels ports vous avez le droit de vous connecter
+    - filtrer par IP
+  - `iptables -L` affiche les règles actuellement en place
+    - *Chain INPUT* correspond aux règles manipulant le trafic entrant, *Chain FORWARD* correspond aux règles manipulant la redirection du trafic, *Chain OUTPUT* correspond aux règles manipulant le trafic sortant
+    - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
+    - *iptables -F* permet de réinitialiser toutes les règles iptables
+  - l'ajout et la suppression de règles
