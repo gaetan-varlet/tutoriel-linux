@@ -607,3 +607,33 @@ Décompresser les *zip* et les *rar*
 
 
 ## Le réseau
+
+
+- **adresse IP** : chaque ordinateur relié à Internet est identifié par une adresse IP
+  - format **IPv4** : 86.172.120.28
+  - format **IPv6** : fe80::209:62fa:fb80:29f2
+  - nom d'hôte, **hostname** en anglais, équivalent à l'IP mais plus simple à retenir
+  - `host` donne le nom d'hôte à partir de l'adresse IP et inversement. Exemple : `host siteduzero.com` et `host 92.243.25.239`
+  - les **serveurs DNS** fournissent la liste des correspondances IP <-> noms d'hôte
+  - le fichier */etc/hosts* permet de modifier la liste de correspondance personnalisée de notre ordinateur, par exemple ajouter un nom d'hôte à chaque PC pour s'y connecter sans retenir l'IP
+  -  `whois` donne des renseignements sur un nom de domaine. Exemple : `whois siteduzero.com`
+
+- `ifconfig` liste les interfaces réseau et permet aussi de faire des réglages réseau
+  - exemple : **eth0** pour une connexion par câble réseau, **lo** pour la boucle locale, c'est-à-dire une connexion à soi-même, **wlan0** pour une connexion sans-fil Wi-Fi
+  - `ifconfig interface etat` permet d'activer/désactiver une interface réseau, par exemple `ifconfig eth0 down` ou `ifconfig eth0 up`
+- `netstat` permet d'avoir des statistiques sur le réseau
+  - `netstat -i` donnent des stats par interface réseau
+  - `netstat -uta` liste toutes les connexions ouvertes
+    - `-u` pour les connexions UDP, `-t` pour les connexions TCP, `-a` pour afficher toutes les connexions quelque soit leur état
+    - permet de voir les **ports** sur lequels se sont les connexions. `-n` permet d'avoir les numéros des ports plutot qu'une description en toutes lettres
+    - `-l` permet de filter uniquement les connexions à l'état *LISTEN*
+    - `netstat -s` permet d'avoir des statistiques résumées
+
+- `iptables` est un pare-feu Linux. Il permet d'établir des règles
+  - à quels ports on peut se connecter à votre ordinateur
+  - à quels ports vous avez le droit de vous connecter
+  - filtrer par IP
+- `iptables -L` affiche les règles actuellement en place
+  - *Chain INPUT* correspond aux règles manipulant le trafic entrant, *Chain FORWARD* correspond aux règles manipulant la redirection du trafic, *Chain OUTPUT* correspond aux règles manipulant le trafic sortant
+  - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
+  - *iptables -F* permet de réinitialiser toutes les règles iptables
