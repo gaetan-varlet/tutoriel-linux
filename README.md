@@ -381,11 +381,11 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
 
 - `ps` et `top` pour lister les processus
   - un processus est un programme qui tourne en mémoire. Certains programmes ne font tourner qu'un processus, d'autres plusieurs comme Chrome qui crée un processus par onglet
-  - `ps` permet d'avoir la liste statique des processus
+  - `ps` permet d'avoir la liste statique des processus en cours
     - *PID* est l'identifiant du processus
     - par défaut, seul les processus lancés par l'utilisateur dans la console sont affichés
     - `ps -ef` permet d'afficher tous les processus et `ps -ejH` de les afficher en arbre
-  - `top` permet d'avoir la liste dynamique des processus
+  - `top` permet d'avoir la liste dynamique des processus et permet de mesurer la consommation en ressources de chaque processus
     - affiche les processus trié sur le taux d'utilisation du processeur
     - `h` permet d'afficher l'aide
 
@@ -395,9 +395,9 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
     - `kill -9` permet de tuer un processus sans lui laisser le temps de s'arrêter proprement, s'il refuse de se fermer normalement. Par exemple `kill -9 12345`
     - `killall` permet de tuer tous les processus d'un même programme, par exemple `killall find`
 
-- `halt` et `reboot` permettent d'arrêter et de redémarrer l'ordinateur
+- `halt` et `reboot` permettent d'arrêter l'ordinateur (sans envoyer le signal d’extinction au PC) et de le redémarrer
   - il faut être root pour les exécuter
-  - ces deux commandes appellent la commande `shutdown` avec des paramètres spécifiques
+  - ces deux commandes appellent la commande `shutdown` avec des paramètres spécifiques : `shutdown -h now` et `shutdown -r now`
 
 
 ## Exécuter des programmes en arrière-plan
