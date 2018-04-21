@@ -172,6 +172,7 @@
         - `find /bin -size +200k | xargs ls -l`. `xargs` sert à construire et exécuter des lignes de commande à partir de l’entrée standard
 
 - manipulations dans les fichiers
+  - `awk` est un langage de traitement de lignes qui sert à manipuler des fichiers textes
 
   - `grep` permet de filtrer des données
     - `grep texte fichier` permet de chercher *texte* dans *fichier*, par exemple `grep alias .bashrc` permet de chercher le mot *alias* dans le fichier *.bashrc* et affiche toutes les lignes du fichier comportant ce mot
