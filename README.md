@@ -39,6 +39,7 @@
 ## Les commandes de base
 
 - `date` donne la date et l'heure
+- `gucharmap` affiche la table de caractères
 - `history` affiche la liste des commandes que l'on a saisi
   - `!num` permet de répéter une commande déjà effectuée, par exemple `!245`
 - `pwd` pour *Print Working Directory* affiche le dossier courant
@@ -384,6 +385,9 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
   - `ps` permet d'avoir la liste statique des processus en cours
     - *PID* est l'identifiant du processus
     - par défaut, seul les processus lancés par l'utilisateur dans la console sont affichés
+    - `ps -x` affiche l'ensemble des processus de l'utilisateur
+      - `-a` ajoute ceux de tous les utilisateurs
+      - `-u` donne des informations supplémentaires comme le propriétaire du processus, l'utilisation du processus et de la mémoire
     - `ps -ef` permet d'afficher tous les processus et `ps -ejH` de les afficher en arbre
   - `top` permet d'avoir la liste dynamique des processus et permet de mesurer la consommation en ressources de chaque processus
     - affiche les processus trié sur le taux d'utilisation du processeur
@@ -395,9 +399,10 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
     - `kill -9` permet de tuer un processus sans lui laisser le temps de s'arrêter proprement, s'il refuse de se fermer normalement. Par exemple `kill -9 12345`
     - `killall` permet de tuer tous les processus d'un même programme, par exemple `killall find`
 
-- `halt` et `reboot` permettent d'arrêter l'ordinateur (sans envoyer le signal d’extinction au PC) et de le redémarrer
-  - il faut être root pour les exécuter
-  - ces deux commandes appellent la commande `shutdown` avec des paramètres spécifiques : `shutdown -h now` et `shutdown -r now`
+- éteindre l'ordinateur
+  - `halt`, `poweroff` et `reboot -p` arrêtent le système en tuant tous les processus sans prévenir personne
+  - `reboot` redeméarre le système de la même manière
+  - `shutdown` arrête ou redémarre le système proprement : `shutdown -h now` et `shutdown -r now`
 
 
 ## Exécuter des programmes en arrière-plan
