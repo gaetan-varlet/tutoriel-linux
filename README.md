@@ -390,6 +390,7 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
       - `-a` ajoute ceux de tous les utilisateurs
       - `-u` donne des informations supplémentaires comme le propriétaire du processus, l'utilisation du processus et de la mémoire
     - `ps -ef` permet d'afficher tous les processus et `ps -ejH` de les afficher en arbre
+  - `pstree`, ou `pstree | less` affiche l’organisation hiérarchique de tous les processus en cours du système
   - `top` permet d'avoir la liste dynamique des processus et permet de mesurer la consommation en ressources de chaque processus
     - affiche les processus trié sur le taux d'utilisation du processeur
     - `h` permet d'afficher l'aide
@@ -407,7 +408,7 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
 
 
 ## Exécuter des programmes en arrière-plan
-
+- un **service**, ou **demon** est un processus qui s'exécute en arrière-plan plutôt que sous le contrôle direct d'un utilisateur
 - `&` permet de lancer un processus en arrière-plan, par exemple `cp fichier copie &`
   - les messages renvoyés par les commandes s'affichent toujours dans la console. On peut donc les envoyer dans un fichier, par exemple `find / -name "*log" > sortiefind &`
 - `nohup` permet de détacher le processus de la console. Si l'utilisateur se déconnecte ou si la console est fermée, le processus continuera. Exemple : `nohup fichier copie`
