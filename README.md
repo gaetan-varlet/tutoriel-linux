@@ -21,7 +21,7 @@
 - **/dev** pour *device* ou *périphérique* en français, contient un fichier pour chaque périphérique
 - **/etc** pour *Editable Text Configuration* ou *configuration éditable par texte*
 - **/lib** pour *libraries* ou *bibliothèqes* contient les bibliothèques partagées par */bin* et */sbin*
-- **/media** et **/mnt** sont les points de montage du système. **/run** est un ajout réent qui doit prendre la relève de **/media**. Les périphériques amovibles doivent être montés lors de leur insertion et démonter lorsqu'on l'enlève
+- **/media** et **/mnt** sont les points de montage du système. **/run** est un ajout récent qui doit prendre la relève de **/media**. Les périphériques amovibles doivent être montés lors de leur insertion et démonter lorsqu'on l'enlève
 - **/proc** et **/sys** contiennent un sytème de fichiers "volatile" qui fournit des infos sur le système
 - **/root** est le répertoire de l'utilisateur *root*
 - **/sbin** pour *system binaries* ou *binaires système* contient des exécutables pour l'administrateur comme partitionner ou formation des disques, configurer le réseau...
@@ -461,7 +461,7 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
 
 ## Archiver et compresser
 
-- `tar` est un programme d'archivage. Il permet :
+- `tar`, pour *tape archiver*, est un programme d'archivage. Il permet :
   - d'assembler des fichiers dans une archive
     - regroupement des fichiers dans un même dossier
     - création de l'archive tar : `tar -cvf nomArchive.tar nomDossier/`. `-c` pour la création de l'archive, `-v` pour l'affichage des détails de l'opération et `-f` pour assembler l'archive dans un fichier
@@ -470,12 +470,12 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
   - d'extraire les fichiers d'une archive, par exemple `tar -xvf archive.tar` avec `-x` pour *extract*. Le contenu de l'archive est extrait dans le répertoire courant
 
 Les différents programmes de compression d'une archive
-- **gzip** est le plus connu et le plus utilisé
+- **gzip**, pour *GNU Zip*, est le plus connu et le plus utilisé
   - `gzip archive.tar` compresse l'archive qui devient *archive.tar.gz*
-  - `gunzip archive.tar.gz` décompresse l'archive qui redevient *archive.tar*
+  - `gunzip archive.tar.gz` ou `gzip -d archive.tar.gz` décompresse l'archive qui redevient *archive.tar*
 - **bzip2** compresse mieux mais plus lentement
   - `bzip2 archive.tar` compresse l'archive qui devient *archive.tar.bz2*
-  - `bunzip2 archive.tar.bz2` décompresse l'archive qui redevient *archive.tar*
+  - `bunzip2 archive.tar.bz2` ou `bzip2 -d archive.tar` décompresse l'archive qui redevient *archive.tar*
 - **compress** n'est plus utilisé car moins performant que *gzip* et *bzip2*
 - contrairement à *zip* et *rar*, *gzip* et *bzip2* ne peuvent compresser qu'un seul fichier à la fois, c'est pour cela qu'il faut créer une archive *tar* auparavant
 
@@ -620,7 +620,6 @@ Décompresser les *zip* et les *rar*
 
 ## Le réseau
 
-
 - **adresse IP** : chaque ordinateur relié à Internet est identifié par une adresse IP
   - format **IPv4** : 86.172.120.28
   - format **IPv6** : fe80::209:62fa:fb80:29f2
@@ -650,4 +649,4 @@ Décompresser les *zip* et les *rar*
     - *Chain INPUT* correspond aux règles manipulant le trafic entrant, *Chain FORWARD* correspond aux règles manipulant la redirection du trafic, *Chain OUTPUT* correspond aux règles manipulant le trafic sortant
     - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
     - *iptables -F* permet de réinitialiser toutes les règles iptables
-  - l'ajout et la suppression de règles
+  - l'ajout et la suppression de règles : TODO
