@@ -173,6 +173,12 @@
 
 - manipulations dans les fichiers
   - `awk` est un langage de traitement de lignes qui sert à manipuler des fichiers textes
+    -  `awk NR==5 fichier` affiche la 5e ligne de *fichier*
+    - `awk NR==2,NR==4 fichier` affiche les lignes 2 à 4 de *fichier*
+
+  - `sed`, pour *stream editor*
+    - `sed -n 5p fichier` affiche la 5e ligne de *fichier*
+    - `sed -n 2,4p fichier` affiche les lignes 2 à 4 de *fichier*
 
   - `grep` permet de filtrer des données
     - `grep texte fichier` permet de chercher *texte* dans *fichier*, par exemple `grep alias .bashrc` permet de chercher le mot *alias* dans le fichier *.bashrc* et affiche toutes les lignes du fichier comportant ce mot
