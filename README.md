@@ -43,6 +43,7 @@
 - `history` affiche la liste des commandes que l'on a saisi
   - `!num` permet de répéter une commande déjà effectuée, par exemple `!245`
 - `pwd` pour *Print Working Directory* affiche le dossier courant
+- `file fichier` précise le type de fichier
 - `ls` pour *list*, liste les fichiers et dossiers du répertoire courant. `ls /usr` liste les fichiers du répertoire *usr*.
   - `-a` ou `--all` affiche les fichiers et dossiers cachés
   - `-A` affiche tout comme `-a` sauf les dossiers *./* (dossier courant) et *../* (dossier parent)
