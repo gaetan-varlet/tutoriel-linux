@@ -39,6 +39,7 @@
 ## Les commandes de base
 
 - `date` donne la date et l'heure
+- `time { commande ; }` exécute *commande* et donne son temps d'exécution
 - `gucharmap` affiche la table de caractères
 - `history` affiche la liste des commandes que l'on a saisi
   - `!num` permet de répéter une commande déjà effectuée, par exemple `!245`
