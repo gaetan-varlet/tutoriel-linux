@@ -389,6 +389,8 @@ Au lieu d'afficher le résultat d'une commande dans la console (comportement par
   - la charge, aussi accessible via `uptime` et `tload`. Il s'agit de la charge moyenne depuis 1, 5 et 15 minutes, plus précisément le nombre de processus qui réclament le processeur. La charge maximale correspond au nombre de processeur, au delà, il y a surcharge
   - la liste des personnes connectés sur la machine, accessible aussi via `who`
 
+- `free -m` mesure la consommation mémoire. L'option `-m` permet d'avoir l'information en Mo
+
 - `ps` et `top` pour lister les processus
   - un processus est un programme qui tourne en mémoire. Certains programmes ne font tourner qu'un processus, d'autres plusieurs comme Chrome qui crée un processus par onglet
   - `ps` permet d'avoir la liste statique des processus en cours
@@ -521,7 +523,7 @@ Décompresser les *zip* et les *rar*
         - ensuite, utilisation du chiffrement symétrique pour chiffrer tous les échanges car le chiffrement asymétrique est beaucoup plus lent que le chiffrement symétrique.
         - une fois le tunnel mis en place, le client peut se connecter au serveur avec son login et son mot de passe
 
-### Transformer sa machine en serveur et s'y connecter en SSH²
+### Transformer sa machine en serveur et s'y connecter en SSH
 
 - transformer son pc en serveur : il faut installer le paquet *openssh-server* `sudo apt-get install openssh-server`
   - normalement, le serveur SSH sera lancé à chaque démarrage
