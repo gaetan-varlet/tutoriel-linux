@@ -659,6 +659,8 @@ Décompresser les *zip* et les *rar*
 
 ## Les scripts bash
 
+### Introduction
+
 - il existe plusieurs environnements console que l'on appelle **shell**
   - le shell est le programme qui gère l'invite de commandes et ses fonctionnalités comme l'historique des commandes, l'autocomplétion, la définition des alias...
   - les fonctionnalités offertes par l'invite de commandes peuvent varier en fonction du shell que l'on utilise
@@ -684,3 +686,22 @@ Décompresser les *zip* et les *rar*
   - exécuter le script : `./script.sh` en étant dans le répertoire du script, ou alors taper le chemin entier, par exemple `/home/louis/scripts/test.sh`
   - exécuter le script en mode débug : `bash -x script.sh`, ce qui affiche le détail de l'exécution du script
   - pour ne plus taper `./` devant le nom des scripts, il faut les placer dans un des répertoires du PATH, qui est une variable système qui indique où sont les programmes exécutables. `echo $PATH` permet d'avoir la liste de ces répertoires, comme */bin* ou */usr/bin*. Pour exécuter le script, il n'y a plus qu'à faire `script.sh`
+
+### Afficher et manipuler une variable
+
+- déclarer une variable : `nomVariable='valeur de la variable'`
+  - sans espace autour du `=`
+  - si on utlise des apostrophes, il faut les échapper : `nomVariable='Bonjour, c\'est moi'`
+  - les back quotes **``** (Alt Gr + 7) demandent à bash d'exécuter ce qui se trouve à l'intérieur. Par exemple, la commande suivante exécute la commande *pwd* :
+  ```bash
+  message=`pwd`
+  echo "Vous êtes dans le dossier $message"
+  ```
+  ```bash
+  Vous êtes dans le dossier /home/louis/bin
+  ```
+- afficher une variable : `echo $nomVariable` va afficher le contenu de *nomVariable*
+  - `echo 'Le message est : $message'` va afficher `Le message est : $message` car le contenu n'est pas analysé avec des simples quotes mais affiché tel quel
+  - `echo "Le message est : $message"` va afficher `Le message est : Bonjour` car le contenu est analysé avec des doubles quotes et les caractères spéciaux comme les variables sont interprétés
+
+  
