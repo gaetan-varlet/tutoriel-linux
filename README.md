@@ -655,3 +655,32 @@ Décompresser les *zip* et les *rar*
     - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
     - *iptables -F* permet de réinitialiser toutes les règles iptables
   - l'ajout et la suppression de règles : TODO
+
+
+## Les scripts bash
+
+- il existe plusieurs environnements console que l'on appelle **shell**
+  - le shell est le programme qui gère l'invite de commandes et ses fonctionnalités comme l'historique des commandes, l'autocomplétion, la définition des alias...
+  - les fonctionnalités offertes par l'invite de commandes peuvent varier en fonction du shell que l'on utilise
+  - les principaux shells sont :
+    - **sh** pour *Bourne Shell*, l'ancêtre de tous les shells
+    - **bash** pour *Bourne Again Shell**, une amélioraton de *sh*, shell par défaut de la plupart des distributions Linux et aussi de Mac OS X
+    - **ksh**, **csh**, **tcsh**, **zsh**
+  - `chsh` pour *Change Shell* permet de changer de shell
+
+- **la programmation shell** est un minilangage de programmation intégré à Linux
+  - un script shell permet d'automatiser une série de commandes. On crée pour cela un fichier contenant la liste des commandes à exécuter, appelé script shell. On dit que l'on fait de la programmation shell
+  - un script shell dépend d'un shell précis, le langage n'est pas exactement le même selon le shell quel 'on utilse'
+  - on va utiliser *bash*
+
+- Création d'un script bash
+  - par convention, on donne l'extension **.sh** aux scripts shell. Ce n'est pas obligatoire, ça fonctionne sans extension
+  - indiquer sur la première le ligne le nom du shell utilisé : `#!/bin/bash`
+  - il suffit ensuite d'écrire les commandes à exécuter les unes après les autres, chacune sur une ligne différente
+  - les lignes commençant par `#` sont des lignes de commentaires, la première ligne du **sha-bang** fait exception
+
+- Exécution d'un script
+  - rendre exécutable le fichier : `chmod u+x script.sh` ou `chmod +x script.sh`
+  - exécuter le script : `./script.sh` en étant dans le répertoire du script, ou alors taper le chemin entier, par exemple `/home/louis/scripts/test.sh`
+  - exécuter le script en mode débug : `bash -x script.sh`, ce qui affiche le détail de l'exécution du script
+  - pour ne plus taper `./` devant le nom des scripts, il faut les placer dans un des répertoires du PATH, qui est une variable système qui indique où sont les programmes exécutables. `echo $PATH` permet d'avoir la liste de ces répertoires, comme */bin* ou */usr/bin*. Pour exécuter le script, il n'y a plus qu'à faire `script.sh`
