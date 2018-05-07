@@ -685,7 +685,7 @@ Décompresser les *zip* et les *rar*
   - rendre exécutable le fichier : `chmod u+x script.sh` ou `chmod +x script.sh`
   - exécuter le script : `./script.sh` en étant dans le répertoire du script, ou alors taper le chemin entier, par exemple `/home/louis/scripts/test.sh`
   - exécuter le script en mode débug : `bash -x script.sh`, ce qui affiche le détail de l'exécution du script
-  - pour ne plus taper `./` devant le nom des scripts, il faut les placer dans un des répertoires du PATH, qui est une variable système qui indique où sont les programmes exécutables. `echo $PATH` permet d'avoir la liste de ces répertoires, comme */bin* ou */usr/bin*. Pour exécuter le script, il n'y a plus qu'à faire `script.sh`
+  - pour ne plus taper `./` devant le nom des scripts, il faut les placer dans un des répertoires du **PATH**, qui est une variable système qui indique une liste des répertoires qui contiennent des exécutables que l'on souhaite pouvoir lancer sans indiquer leur répertoire. `echo $PATH` permet d'avoir cette liste, comme */bin* ou */usr/bin*. Pour exécuter le script, il n'y a plus qu'à faire `script.sh`
 
 ### Afficher et manipuler une variable
 
@@ -704,4 +704,49 @@ Décompresser les *zip* et les *rar*
   - `echo 'Le message est : $message'` va afficher `Le message est : $message` car le contenu n'est pas analysé avec des simples quotes mais affiché tel quel
   - `echo "Le message est : $message"` va afficher `Le message est : Bonjour` car le contenu est analysé avec des doubles quotes et les caractères spéciaux comme les variables sont interprétés
 
-  
+- `read` demande à l'utilisateur de saisir du texte, qui sera stocké dans une variable
+  - exemple :
+    ```bash
+    read var1 var2
+    echo "Bonjour $var1 $var2"
+    ```
+    L'utilisateur est invité à taper du texte (1ère ligne) avant de voir le résultat s'afficher
+    ```bash
+    Louis Varlet
+    Bonjour Louis Varlet
+    ```
+  - `-p` permet d'afficher un message de prompt : `read -p 'Entrez votre nom : ' nom`
+  - `-n` limite le nombre de caractères : `read -n 5 nom`
+  - `-t` limite le temps de saisie
+  - `-s` masque les caractères saisis
+
+- `let` permet d'effectuer des opérations mathématiques
+  - sans préciser `let`, les variables sont des chaînes de caractères
+  - exemple : `let "a = 5"`, `let "b = 2"`, `let "c = a + b"`, `echo $c`. Ce dernier retournera 7
+  - les opérations : addition (+), soustraction (-), multiplication (\*), division entière (/), puissance (\*\*) et modulo (%)
+
+- les variables d'environnement
+  - utilisable dans n'importe quel programme, on parle aussi de *variables globales*
+  - `env` ou `printenv` permet de lister toutes celles qui sont en mémoire : **SHELL** qui indique le type de shell en cours d'utilisation, **PATH** vu avant, **EDITOR** qui indique l'éditeur de texte par défaut, **HOME** qui indique la position du dossier *home*, **PWD**, **OLDPWD**...
+  - `printenv VARIABLE` affiche la valeur de la variable d'environnement *VARIABLE*
+  - on peut les utiliser en les appelant par leur nom : `echo "Votre éditeur par défaut est $EDITOR"`
+
+- les variables de paramètres
+  - les scripts bash acceptent des paramètres : `./script.sh param1 param2`
+  - pour les récupérer :
+    - `$#` contient le nombre de paramètres
+    - `$0` contient le nom du script
+    - `$1` contient le 1er paramètre, ..., `$9` contient le 9e paramètre
+    - exemple : `echo "Le paramètre 1 est $1"`
+
+  - les tableaux
+    - ils contiennent plusieurs cases, par exemple `tableau=('valeur0' 'valeur1' 'valeur2')`
+    - pour y accéder, `${tableau[2]}`, la numérotation commence à 0
+    - on peut aussi définir le contenu d'une case : `tableau[2]='valeur2'`
+    - on peut afficher l'ensemble du contenu du tableau d'un seul coup en utilisant ${tableau[\*]}
+
+### Les conditions
+
+### Les boucles
+
+### Les fonctions
