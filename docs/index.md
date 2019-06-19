@@ -655,3 +655,98 @@ Décompresser les *zip* et les *rar*
     - *policy ACCEPT* signifie que par défaut, tout le trafic est accepté, alors que *policy DROP* permet de resufer toutes les connexions que nous n'avons pas autorisé
     - *iptables -F* permet de réinitialiser toutes les règles iptables
   - l'ajout et la suppression de règles : TODO
+
+
+## Les scripts bash
+
+### Introduction
+
+- il existe plusieurs environnements console que l'on appelle **shell**
+  - le shell est le programme qui gère l'invite de commandes et ses fonctionnalités comme l'historique des commandes, l'autocomplétion, la définition des alias...
+  - les fonctionnalités offertes par l'invite de commandes peuvent varier en fonction du shell que l'on utilise
+  - les principaux shells sont :
+    - **sh** pour *Bourne Shell*, l'ancêtre de tous les shells
+    - **bash** pour *Bourne Again Shell**, une amélioraton de *sh*, shell par défaut de la plupart des distributions Linux et aussi de Mac OS X
+    - **ksh**, **csh**, **tcsh**, **zsh**
+  - `chsh` pour *Change Shell* permet de changer de shell
+
+- **la programmation shell** est un minilangage de programmation intégré à Linux
+  - un script shell permet d'automatiser une série de commandes. On crée pour cela un fichier contenant la liste des commandes à exécuter, appelé script shell. On dit que l'on fait de la programmation shell
+  - un script shell dépend d'un shell précis, le langage n'est pas exactement le même selon le shell quel 'on utilse'
+  - on va utiliser *bash*
+
+- Création d'un script bash
+  - par convention, on donne l'extension **.sh** aux scripts shell. Ce n'est pas obligatoire, ça fonctionne sans extension
+  - indiquer sur la première le ligne le nom du shell utilisé : `#!/bin/bash`
+  - il suffit ensuite d'écrire les commandes à exécuter les unes après les autres, chacune sur une ligne différente
+  - les lignes commençant par `#` sont des lignes de commentaires, la première ligne du **sha-bang** fait exception
+
+- Exécution d'un script
+  - rendre exécutable le fichier : `chmod u+x script.sh` ou `chmod +x script.sh`
+  - exécuter le script : `./script.sh` en étant dans le répertoire du script, ou alors taper le chemin entier, par exemple `/home/louis/scripts/test.sh`
+  - exécuter le script en mode débug : `bash -x script.sh`, ce qui affiche le détail de l'exécution du script
+  - pour ne plus taper `./` devant le nom des scripts, il faut les placer dans un des répertoires du **PATH**, qui est une variable système qui indique une liste des répertoires qui contiennent des exécutables que l'on souhaite pouvoir lancer sans indiquer leur répertoire. `echo $PATH` permet d'avoir cette liste, comme */bin* ou */usr/bin*. Pour exécuter le script, il n'y a plus qu'à faire `script.sh`
+
+### Afficher et manipuler une variable
+
+- déclarer une variable : `nomVariable='valeur de la variable'`
+  - sans espace autour du `=`
+  - si on utlise des apostrophes, il faut les échapper : `nomVariable='Bonjour, c\'est moi'`
+  - les back quotes **``** (Alt Gr + 7) demandent à bash d'exécuter ce qui se trouve à l'intérieur. Par exemple, la commande suivante exécute la commande *pwd* :
+  ```bash
+  message=`pwd`
+  echo "Vous êtes dans le dossier $message"
+  ```
+  ```bash
+  Vous êtes dans le dossier /home/louis/bin
+  ```
+- afficher une variable : `echo $nomVariable` va afficher le contenu de *nomVariable*
+  - `echo 'Le message est : $message'` va afficher `Le message est : $message` car le contenu n'est pas analysé avec des simples quotes mais affiché tel quel
+  - `echo "Le message est : $message"` va afficher `Le message est : Bonjour` car le contenu est analysé avec des doubles quotes et les caractères spéciaux comme les variables sont interprétés
+
+- `read` demande à l'utilisateur de saisir du texte, qui sera stocké dans une variable
+  - exemple :
+    ```bash
+    read var1 var2
+    echo "Bonjour $var1 $var2"
+    ```
+    L'utilisateur est invité à taper du texte (1ère ligne) avant de voir le résultat s'afficher
+    ```bash
+    Louis Varlet
+    Bonjour Louis Varlet
+    ```
+  - `-p` permet d'afficher un message de prompt : `read -p 'Entrez votre nom : ' nom`
+  - `-n` limite le nombre de caractères : `read -n 5 nom`
+  - `-t` limite le temps de saisie
+  - `-s` masque les caractères saisis
+
+- `let` permet d'effectuer des opérations mathématiques
+  - sans préciser `let`, les variables sont des chaînes de caractères
+  - exemple : `let "a = 5"`, `let "b = 2"`, `let "c = a + b"`, `echo $c`. Ce dernier retournera 7
+  - les opérations : addition (+), soustraction (-), multiplication (\*), division entière (/), puissance (\*\*) et modulo (%)
+
+- les variables d'environnement
+  - utilisable dans n'importe quel programme, on parle aussi de *variables globales*
+  - `env` ou `printenv` permet de lister toutes celles qui sont en mémoire : **SHELL** qui indique le type de shell en cours d'utilisation, **PATH** vu avant, **EDITOR** qui indique l'éditeur de texte par défaut, **HOME** qui indique la position du dossier *home*, **PWD**, **OLDPWD**...
+  - `printenv VARIABLE` affiche la valeur de la variable d'environnement *VARIABLE*
+  - on peut les utiliser en les appelant par leur nom : `echo "Votre éditeur par défaut est $EDITOR"`
+
+- les variables de paramètres
+  - les scripts bash acceptent des paramètres : `./script.sh param1 param2`
+  - pour les récupérer :
+    - `$#` contient le nombre de paramètres
+    - `$0` contient le nom du script
+    - `$1` contient le 1er paramètre, ..., `$9` contient le 9e paramètre
+    - exemple : `echo "Le paramètre 1 est $1"`
+
+  - les tableaux
+    - ils contiennent plusieurs cases, par exemple `tableau=('valeur0' 'valeur1' 'valeur2')`
+    - pour y accéder, `${tableau[2]}`, la numérotation commence à 0
+    - on peut aussi définir le contenu d'une case : `tableau[2]='valeur2'`
+    - on peut afficher l'ensemble du contenu du tableau d'un seul coup en utilisant ${tableau[\*]}
+
+### Les conditions
+
+### Les boucles
+
+### Les fonctions
